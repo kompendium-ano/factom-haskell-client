@@ -1,5 +1,6 @@
 {-# LANGUAGE DeriveAnyClass        #-}
 {-# LANGUAGE DeriveGeneric         #-}
+{-# LANGUAGE DuplicateRecordFields #-}
 {-# LANGUAGE FlexibleInstances     #-}
 {-# LANGUAGE GADTs                 #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
@@ -19,6 +20,21 @@ import           GHC.Generics
 import           Factom.Utils
 
 --------------------------------------------------------------------------------
+
+   -- { "jsonrpc": "2.0"
+   -- , "id": 0
+   -- , "method":"entry"
+   -- , "params": {
+   --     "hash":"24674e6bc3094eb773297de955ee095a05830e431da13a37382dcdc89d73c7d7"
+   --    }
+   -- }
+data ApiRequest =
+  ApiRequest
+    { jsonRpc :: T.Text
+    , id      :: Int
+    , method  :: T.Text
+    , params  :: Maybe Object
+    } deriving (Eq, Show, Generic, FromJSON)
 
 data ApiResponse a =
   ApiResponse

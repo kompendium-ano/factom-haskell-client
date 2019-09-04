@@ -39,8 +39,11 @@ endpoint = "http://localhost:8088/v2"
 
 type FactomAPI =
 
-  -- POST /entry
+  -- curl -X POST --data-binary '{"jsonrpc": "2.0", "id": 0, "method":"entry","params":
+  -- {"hash":"24674e6bc3094eb773297de955ee095a05830e431da13a37382dcdc89d73c7d7"}}' \
+  -- -H 'content-type:text/plain;' http://localhost:8088/v2
        "entry"
+    :> ReqBody '[JSON]
     :> Post '[JSON] (ApiResponse Entry)
 
   -- POST /entry-ack
