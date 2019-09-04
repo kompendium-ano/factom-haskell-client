@@ -41,25 +41,29 @@ type FactomAPI =
 
   -- POST /entry
        "entry"
-    :> Post '[JSON] [ApiResponse Entry]
+    :> Post '[JSON] (ApiResponse Entry)
 
   -- POST /entry-ack
   :<|> "entry-block"
-    :> Post '[JSON] [ApiResponse EntryBlock]
+    :> Post '[JSON] (ApiResponse EntryBlock)
 
   -- POST /entry-credit-balance
   :<|> "entry-credit-balance"
-    :> Post '[JSON] [ApiResponse EntryCreditBalance]
+    :> Post '[JSON] (ApiResponse EntryCreditBalance)
 
 factomAPI :: Proxy FactomAPI
 factomAPI = Proxy
 
 -- Derive call functions for the api
-getEntry     :: ClientM [CurrencyPair]
-getPersonalInfo      :: Maybe T.Text -> ClientM User
-getPersonalStatement :: Maybe T.Text -> T.Text -> T.Text -> T.Text -> ClientM Statement
+getEntry :: ClientM (ApiResponse Entry)
+getEntryBlock :: ClientM (ApiResponse EntryBlock)
+getEntryCreditBalance :: ClientM (ApiResponse EntryCreditBalance)
 (     getEntry
  :<|> getEntryBlock
  :<|> getEntryCreditBalance ) = client factomAPI
 
 --------------------------------------------------------------------------------
+
+getEntry' = undefined
+getEntryBlock' = undefined
+getEntryCreditBalance' = undefined

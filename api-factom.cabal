@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 2392d7e621f02d65713e201ec112d5ee7e1d329e0da724a1e5ec53be886dd7ab
+-- hash: c1cd8ce31fd141d9f8a5d7c9eff8b73b3be0226d229ac2c083a342eefb477607
 
 name:                api-factom
 version:             0.1.3.0
@@ -33,6 +33,7 @@ library
       Factom.Wallet.Api
       Factom.Types
   other-modules:
+      Factom.Utils
       Lib
       Paths_api_factom
   build-depends:
