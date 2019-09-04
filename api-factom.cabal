@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: c1cd8ce31fd141d9f8a5d7c9eff8b73b3be0226d229ac2c083a342eefb477607
+-- hash: d1dadd1c0ec7aa95f9f714f0ed28b38b35240fe98244081622968bc56bd56e4c
 
 name:                api-factom
 version:             0.1.3.0
@@ -45,6 +45,7 @@ library
     , http-conduit
     , servant
     , servant-client
+    , servant-multipart
     , text
     , time
   default-language: Haskell2010

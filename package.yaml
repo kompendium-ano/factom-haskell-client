@@ -25,6 +25,7 @@ library:
   - http-conduit
   - servant
   - servant-client
+  - servant-multipart
   - http-client
   - http-client-tls
 executables:
