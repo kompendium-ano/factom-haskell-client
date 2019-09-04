@@ -34,7 +34,7 @@ data ApiRequest =
     , id      :: Int
     , method  :: T.Text
     , params  :: Maybe Object
-    } deriving (Eq, Show, Generic, FromJSON)
+    } deriving (Eq, Show, Generic, ToJSON)
 
 data ApiResponse a =
   ApiResponse

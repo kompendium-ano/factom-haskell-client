@@ -43,7 +43,7 @@ type FactomAPI =
   -- {"hash":"24674e6bc3094eb773297de955ee095a05830e431da13a37382dcdc89d73c7d7"}}' \
   -- -H 'content-type:text/plain;' http://localhost:8088/v2
        "entry"
-    :> ReqBody '[JSON]
+    :> ReqBody '[JSON] ApiRequest
     :> Post '[JSON] (ApiResponse Entry)
 
   -- POST /entry-ack
@@ -58,7 +58,7 @@ factomAPI :: Proxy FactomAPI
 factomAPI = Proxy
 
 -- Derive call functions for the api
-getEntry :: ClientM (ApiResponse Entry)
+getEntry :: ApiRequest -> ClientM (ApiResponse Entry)
 getEntryBlock :: ClientM (ApiResponse EntryBlock)
 getEntryCreditBalance :: ClientM (ApiResponse EntryCreditBalance)
 (     getEntry
