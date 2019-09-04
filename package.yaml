@@ -16,6 +16,7 @@ library:
   exposed-modules:
   - Factom.Api
   - Factom.Wallet.Api
+  - Factom.Types
   dependencies:
   - base >=4.7 && <5
   - aeson
