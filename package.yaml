@@ -14,20 +14,24 @@ dependencies:
 library:
   source-dirs: src
   exposed-modules:
-  - Factom.Api
-  - Factom.Wallet.Api
-  - Factom.Types
+  - Factom.RPC.Api
+  - Factom.RPC.Wallet.Api
+  - Factom.RPC.Types
   dependencies:
   - base >=4.7 && <5
   - aeson
+  - aeson-casing
   - text
   - time
   - http-conduit
   - servant
   - servant-client
-  - servant-multipart
+  - servant-jsonrpc
+  - servant-jsonrpc-client
   - http-client
   - http-client-tls
+  - network
+  - transformers
 executables:
   mnb-app:
     main: Main.hs
