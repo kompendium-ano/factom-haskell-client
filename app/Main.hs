@@ -9,8 +9,8 @@ import qualified Data.Text                   as T
 import           Data.Time.Clock
 import           System.Environment
 
-import qualified Factom.Api                  as FCTApi
-import qualified Factom.Types                as FCTApi
+import qualified Factom.RPC.Api              as FCTApi
+import qualified Factom.RPC.Types            as FCTApi
 
 --------------------------------------------------------------------------------
 
