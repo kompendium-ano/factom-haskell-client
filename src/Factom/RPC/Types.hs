@@ -8,16 +8,16 @@
 {-# LANGUAGE TemplateHaskell       #-}
 {-# LANGUAGE TypeSynonymInstances  #-}
 
-module Factom.Types where
+module Factom.RPC.Types where
 
 import           Data.Aeson
 import           Data.Aeson.TH
 import           Data.Maybe
-import qualified Data.Text     as T
+import qualified Data.Text        as T
 import           Data.Time
 import           GHC.Generics
 
-import           Factom.Utils
+import           Factom.RPC.Utils
 
 --------------------------------------------------------------------------------
 
