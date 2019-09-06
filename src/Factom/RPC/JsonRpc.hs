@@ -94,9 +94,9 @@ unwrapJson (Response _ r _) = r
 
 
 newtype JsonRpcT m a =
-  JsonRpcT { unJsonRpcT :: StateT Int (ReaderT Socket m) a }
-    deriving ( Functor, Applicative, Monad, MonadIO )
-
+  JsonRpcT
+    { unJsonRpcT :: StateT Int (ReaderT Socket m) a
+    } deriving ( Functor, Applicative, Monad, MonadIO )
 
 runJsonRpcT :: MonadIO m => Socket -> JsonRpcT m a -> m a
 runJsonRpcT s jm = flip runReaderT s . flip evalStateT 0 $ unJsonRpcT jm
