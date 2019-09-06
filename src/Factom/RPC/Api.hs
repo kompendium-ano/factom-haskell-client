@@ -23,7 +23,9 @@ import           Factom.RPC.JsonRpc (JsonRpcT, runJsonRpcT)
 
 --------------------------------------------------------------------------------
 
-endpoint = "http://localhost:8088/v2"
+endpoint  = "http://localhost:8088/v2"
+endpointDaemonRemote = "http://dev.factomd.net/v2"
+
 
 runTCPClient :: HostName -> ServiceName -> JsonRpcT IO a -> IO a
 runTCPClient host port f = do
@@ -41,3 +43,14 @@ runTCPClient host port f = do
           return sock
 
       talk sock = runJsonRpcT sock f
+
+-- | "ablock-by-height" - Retrieve administrative blocks for any given height.
+--
+ablockByHeight :: Int -> RPC ()
+ablockByHeight height = undefined
+  -- method "adblock-by-height" $ List [Int height]
+
+-- | "ack" - Find the status of a transaction
+--
+ack :: RPC ()
+ack = undefined

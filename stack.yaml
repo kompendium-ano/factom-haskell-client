@@ -1,11 +1,10 @@
 resolver: lts-14.0
 
+allow-newer: true
+
 packages:
 - .
 
 extra-deps:
-- git: https://github.com/sigrlami/servant-jsonrpc
-  commit: a225070b31e3c68d004800ae35eed0b7ec1b2a70
-  subdirs:
-    - servant-jsonrpc
-    - servant-jsonrpc-client
+# - remote-json-0.2@sha256:97a684ceb9226684bb14a025e1698d3e19ab761c3b13d83d6a43e7a3b067973e,5373
+# - remote-monad-0.2@sha256:a2439b1ff68620c1004e36420104d96bb8942395190607f98372f2afec20b31f,3799

@@ -92,7 +92,6 @@ instance FromJSON a => FromJSON (Response a) where
 unwrapJson :: (Show a, FromJSON a) => Response a -> Either Error a
 unwrapJson (Response _ r _) = r
 
-
 newtype JsonRpcT m a =
   JsonRpcT
     { unJsonRpcT :: StateT Int (ReaderT Socket m) a
