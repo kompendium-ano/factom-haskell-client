@@ -1,12 +1,13 @@
-name: api-factom
-version: '0.1.3.0'
-description: Api client for Factom blockchain
+name: api-rpc-factom
+version: '0.1.3.2'
+description: RPC API client for Factom blockchain
+synopsis: RPC API client for Factom
 category: Web
 author: Sergey Bushnyak
 maintainer: sergey.bushnyak@sigrlami.eu
 copyright: ! 'Copyright: (c) 2019 Sergey Bushnyak'
 license: MIT
-github: sigrlami/api-monobank
+github: kompendium-llc/api-rpc-factom
 extra-source-files:
 - README.md
 dependencies:
@@ -33,7 +34,7 @@ library:
   - network
   - transformers
 executables:
-  mnb-app:
+  factom-app:
     main: Main.hs
     source-dirs: app
     ghc-options:
@@ -48,9 +49,9 @@ executables:
     - stm
     - text
     - time
-    - api-factom
+    - api-rpc-factom
 tests:
-  mnb-app-test:
+  factom-test:
     main: Spec.hs
     source-dirs: tests
     ghc-options:
@@ -59,4 +60,4 @@ tests:
     - -with-rtsopts=-N
     dependencies:
     - base
-    - hs-coindesk-api
+    - api-rpc-factom
