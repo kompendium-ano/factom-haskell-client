@@ -6,5 +6,7 @@ packages:
 - .
 
 extra-deps:
-# - remote-json-0.2@sha256:97a684ceb9226684bb14a025e1698d3e19ab761c3b13d83d6a43e7a3b067973e,5373
-# - remote-monad-0.2@sha256:a2439b1ff68620c1004e36420104d96bb8942395190607f98372f2afec20b31f,3799
+- git: 'git@github.com:sigrlami/remote-json.git'
+  commit: 'd572009b0193893a5e4da04410a27dcaa156787f'
+- git: 'git@github.com:ku-fpg/remote-monad'
+  commit: '79d22ea2bde876e6640a25472d90fc3d7dd82a3a'

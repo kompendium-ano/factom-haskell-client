@@ -29,6 +29,8 @@ library:
   - http-client-tls
   - network
   - transformers
+  - remote-monad
+  - remote-json
 executables:
   factom-app:
     main: Main.hs

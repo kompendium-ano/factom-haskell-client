@@ -12,13 +12,17 @@ module Factom.RPC.Api
     ( runTCPClient
     ) where
 
-import           Control.Exception  (bracket)
-import           Network.Socket     (HostName, ServiceName, SocketType (Stream),
-                                     addrAddress, addrFamily, addrProtocol,
-                                     addrSocketType, close, connect,
-                                     defaultHints, getAddrInfo, socket)
+import           Control.Exception                (bracket)
+import           Control.Remote.Monad.JSON
+import           Control.Remote.Monad.JSON.Router (Call, router, transport)
+import           Network.Socket                   (HostName, ServiceName,
+                                                   SocketType (Stream),
+                                                   addrAddress, addrFamily,
+                                                   addrProtocol, addrSocketType,
+                                                   close, connect, defaultHints,
+                                                   getAddrInfo, socket)
 
-import           Factom.RPC.JsonRpc (JsonRpcT, runJsonRpcT)
+import           Factom.RPC.JsonRpc               (JsonRpcT, runJsonRpcT)
 
 
 --------------------------------------------------------------------------------
