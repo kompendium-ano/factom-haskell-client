@@ -1,6 +1,7 @@
 {-# LANGUAGE DataKinds                  #-}
 {-# LANGUAGE DeriveGeneric              #-}
 {-# LANGUAGE FlexibleInstances          #-}
+{-# LANGUAGE GADTs                      #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE OverloadedStrings          #-}
 {-# LANGUAGE ScopedTypeVariables        #-}
@@ -12,9 +13,16 @@ module Factom.RPC.Api
     ( runTCPClient
     ) where
 
+import           Control.Concurrent
 import           Control.Exception                (bracket)
+import           Control.Monad.IO.Class
 import           Control.Remote.Monad.JSON
-import           Control.Remote.Monad.JSON.Router (Call, router, transport)
+import           Control.Remote.Monad.JSON.Client
+import           Control.Remote.Monad.JSON.Router
+import           Control.Remote.Monad.JSON.Trace
+import           Data.Aeson
+import           Data.Aeson.Types
+import           Data.Text
 import           Network.Socket                   (HostName, ServiceName,
                                                    SocketType (Stream),
                                                    addrAddress, addrFamily,
@@ -23,7 +31,7 @@ import           Network.Socket                   (HostName, ServiceName,
                                                    getAddrInfo, socket)
 
 import           Factom.RPC.JsonRpc               (JsonRpcT, runJsonRpcT)
-
+import           Factom.RPC.Types.AdminBlock
 
 --------------------------------------------------------------------------------
 
@@ -50,11 +58,36 @@ runTCPClient host port f = do
 
 -- | "ablock-by-height" - Retrieve administrative blocks for any given height.
 --
-ablockByHeight :: Int -> RPC ()
-ablockByHeight height = undefined
-  -- method "adblock-by-height" $ List [Int height]
+reqAblockByHeight :: Int -> RPC ()
+reqAblockByHeight height =
+  method "adblock-by-height" $ List [toJSON height]
 
 -- | "ack" - Find the status of a transaction
 --
-ack :: RPC ()
-ack = undefined
+reqAck :: RPC ()
+reqAck =
+  method "ack" None
+
+-- | Get all information about Admin Block
+--   based on Merkle Root Tree
+reqAdminBlock :: Text -> RPC Ablock
+reqAdminBlock mqr =
+  method "admin-block" $ List [String mqr]
+
+
+
+-- |
+--
+reqHeights :: RPC ()
+reqHeights =
+  method "heights" None -- $ Named [("jsonrpc", String "2.0"), ("id", toJSON (0::Int))]
+
+
+-------------------------
+
+main = do
+  let s = strongSession (traceSendAPI "" $ clientSendAPI endpointDaemonRemote)
+  h <- send s $ do
+         h <- reqHeights --ablockByHeight 1000
+         return h
+  print h
