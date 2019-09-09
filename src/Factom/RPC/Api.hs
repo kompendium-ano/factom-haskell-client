@@ -74,7 +74,131 @@ reqAdminBlock :: Text -> RPC Ablock
 reqAdminBlock mqr =
   method "admin-block" $ List [String mqr]
 
+-- | Retrieve information about the directory block anchors that have been confirmed on Bitcoin and Ethereum.
+--
+reqAnchors :: RPC ()
+reqAnchors =
+  method "anchors" None
 
+-- | Retrieve information about the directory block anchors that have been confirmed on Bitcoin and Ethereum.
+--
+reqChainHead :: RPC ()
+reqChainHead =
+  method "chain-head" None
+
+-- | Send a Chain Commit Message to factomd to create a new Chain.
+--
+reqCommitChain :: RPC ()
+reqCommitChain =
+  method "commit-chain" None
+
+-- | Send an Entry Commit Message to factom to create a new Entry
+--
+reqCommitEntry :: RPC ()
+reqCommitEntry =
+  method "commit-entry" None
+
+-- | Return statistic for current call
+--
+reqCurrentMinute :: RPC ()
+reqCurrentMinute =
+  method "current-minute" None
+
+-- | Send an Entry Commit Message to factom to create a new Entry
+--
+reqDBlockByHeight :: RPC ()
+reqDBlockByHeight =
+  method "dblock-by-height" None
+
+-- | Retrieve basic system information along with a description of the node’s current perception of the network
+--
+reqDiagnostics :: RPC ()
+reqDiagnostics =
+  method "diagnostics" None
+
+-- | Get information about directory block
+--
+reqDirectoryBlock :: RPC ()
+reqDirectoryBlock =
+  method "directory-block" None
+
+-- | Get the most recently recorded block.
+--
+reqDirectoryBlockHead :: RPC ()
+reqDirectoryBlockHead =
+  method "directory-block-head" None
+
+-- | Retrieve the entry credit block for any given height
+--
+reqEcblockByHeight :: Int -> RPC ()
+reqEcblockByHeight height =
+  method "ecblok-by-height" $ List [toJSON height]
+
+-- | Get an Entry from factomd specified by the Entry Hash.
+--
+reqEntry :: Text -> RPC ()
+reqEntry hash =
+  method "entry" $ List [String hash]
+
+-- |
+--
+reqEntryAck :: RPC ()
+reqEntryAck =
+  method "entry-ack" None
+
+-- |
+--
+reqEntryBlock :: RPC ()
+reqEntryBlock =
+  method "entry-block" None
+
+-- |
+--
+reqEntryCreditBalance :: RPC ()
+reqEntryCreditBalance =
+  method "entry-credit-balane" None
+
+-- |
+--
+reqEntryCreditBlock :: RPC ()
+reqEntryCreditBlock =
+  method "entry-credit-block" None
+
+-- |
+--
+reqEntryCreditRate :: RPC ()
+reqEntryCreditRate =
+  method "entry-credit-rate" None
+
+-- |
+--
+reqFactoidAck :: RPC ()
+reqFactoidAck =
+  method "factoid-ack" None
+
+-- |
+--
+reqFactoidBalance :: RPC ()
+reqFactoidBalance =
+  method "factoid-balance" None
+
+-- |
+--
+reqFactoidBlock :: RPC ()
+reqFactoidBlock =
+  method "factoid-blok" None
+
+-- |
+--
+reqFactoidSubmit :: RPC ()
+reqFactoidSubmit =
+  method "factoid-submit" None
+
+-- |
+--
+reqFBlockByHeight :: RPC ()
+reqFBlockByHeight =
+  method "fblock-by-height" None
 
 -- |
 --
