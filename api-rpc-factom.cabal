@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: a4ddd8db567343b927617cef51f606bd3fe2cd2cc442e46881b4a48a450e743b
+-- hash: 9c33d51c67bd843e109a9c35bb6004d6163c00f7833b30ef044d788ecae0ea10
 
 name:           api-rpc-factom
 version:        0.1.3.2
@@ -33,6 +33,7 @@ library
       Factom.RPC.Types
   other-modules:
       Factom.RPC.JsonRpc
+      Factom.RPC.Types.AdminBlock
       Factom.RPC.Utils
       Paths_api_rpc_factom
   hs-source-dirs:
@@ -45,8 +46,10 @@ library
     , http-client
     , http-client-tls
     , http-conduit
+    , json-alt
     , network
     , remote-json
+    , remote-json-client
     , remote-monad
     , text
     , time
