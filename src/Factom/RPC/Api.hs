@@ -32,11 +32,12 @@ import           Network.Socket                   (HostName, ServiceName,
 
 import           Factom.RPC.JsonRpc               (JsonRpcT, runJsonRpcT)
 import           Factom.RPC.Types.AdminBlock
+import           Factom.RPC.Types.Heights
 
 --------------------------------------------------------------------------------
 
 endpoint  = "http://localhost:8088/v2"
-endpointDaemonRemote = "http://dev.factomd.net/v2"
+endpointRemote = "https://api.factomd.net/v2" -- "http://dev.factomd.net/v2"
 
 
 runTCPClient :: HostName -> ServiceName -> JsonRpcT IO a -> IO a
@@ -202,15 +203,17 @@ reqFBlockByHeight =
 
 -- |
 --
-reqHeights :: RPC ()
+reqHeights :: RPC Heights
 reqHeights =
-  method "heights" None -- $ Named [("jsonrpc", String "2.0"), ("id", toJSON (0::Int))]
+  method "heights" None
+
+-- $ Named [("jsonrpc", String "2.0"), ("id", toJSON (0::Int))]
 
 
--------------------------
+--------------------------------------------------------------------------------
 
 main = do
-  let s = strongSession (traceSendAPI "" $ clientSendAPI endpointDaemonRemote)
+  let s = weakSession (traceSendAPI "" $ clientSendAPI endpointRemote)
   h <- send s $ do
          h <- reqHeights --ablockByHeight 1000
          return h
