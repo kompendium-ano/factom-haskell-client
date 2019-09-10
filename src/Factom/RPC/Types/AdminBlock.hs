@@ -137,20 +137,20 @@ instance ToJSON TopLevel where
 
 
 
-parse :: FilePath -> IO TopLevel
-parse filename = do input <- BSL.readFile filename
-                    case decode input of
-                      Nothing -> fatal $ case (decode input :: Maybe Value) of
-                                           Nothing -> "Invalid JSON file: "     ++ filename
-                                           Just v  -> "Mismatched JSON value from file: " ++ filename
-                      Just r  -> return (r :: TopLevel)
-  where
-    fatal :: String -> IO a
-    fatal msg = do hPutStrLn stderr msg
-                   exitFailure
+-- parse :: FilePath -> IO TopLevel
+-- parse filename = do input <- BSL.readFile filename
+--                     case decode input of
+--                       Nothing -> fatal $ case (decode input :: Maybe Value) of
+--                                            Nothing -> "Invalid JSON file: "     ++ filename
+--                                            Just v  -> "Mismatched JSON value from file: " ++ filename
+--                       Just r  -> return (r :: TopLevel)
+--   where
+--     fatal :: String -> IO a
+--     fatal msg = do hPutStrLn stderr msg
+--                    exitFailure
 
-main :: IO ()
-main = do
-  filenames <- getArgs
-  forM_ filenames (\f -> parse f >>= (\p -> p `seq` putStrLn $ "Successfully parsed " ++ f))
-  exitSuccess
+-- main :: IO ()
+-- main = do
+--   filenames <- getArgs
+--   forM_ filenames (\f -> parse f >>= (\p -> p `seq` putStrLn $ "Successfully parsed " ++ f))
+--   exitSuccess
