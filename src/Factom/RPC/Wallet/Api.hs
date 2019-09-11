@@ -1,3 +1,14 @@
+{-# LANGUAGE DataKinds                  #-}
+{-# LANGUAGE DeriveGeneric              #-}
+{-# LANGUAGE FlexibleInstances          #-}
+{-# LANGUAGE GADTs                      #-}
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE OverloadedStrings          #-}
+{-# LANGUAGE ScopedTypeVariables        #-}
+{-# LANGUAGE TemplateHaskell            #-}
+{-# LANGUAGE TypeFamilies               #-}
+{-# LANGUAGE TypeOperators              #-}
+
 module Factom.RPC.Wallet.Api where
 
 import           Control.Concurrent
@@ -20,6 +31,8 @@ import           Network.Socket                   (HostName, ServiceName,
 import           Factom.RPC.JsonRpc               (JsonRpcT, runJsonRpcT)
 
 --------------------------------------------------------------------------------
+
+endpoint = "http://localhost:8089/v2"
 
 -- active-identity-keys
 -- add-ec-output
