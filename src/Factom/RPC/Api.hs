@@ -36,7 +36,7 @@ import           Factom.RPC.Types.Heights
 
 --------------------------------------------------------------------------------
 
-endpoint  = "http://localhost:8088/v2"
+endpoint  = "http://192.168.0.182:8088/v2"
 endpointRemote = "https://api.factomd.net/v2" -- "http://dev.factomd.net/v2"
 
 
@@ -213,7 +213,7 @@ reqHeights =
 --------------------------------------------------------------------------------
 
 main = do
-  let s = weakSession (traceSendAPI "" $ clientSendAPI endpointRemote)
+  let s = weakSession (traceSendAPI "" $ clientSendAPI endpoint)
   h <- send s $ do
          h <- reqHeights --ablockByHeight 1000
          return h
