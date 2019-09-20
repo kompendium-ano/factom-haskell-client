@@ -5,7 +5,7 @@
 {-# LANGUAGE TemplateHaskell     #-}
 {-# LANGUAGE TypeOperators       #-}
 
-module JsonDataDirectoryBlock where
+module Factom.RPC.Types.DirectoryBlock where
 
 import           Control.Applicative
 import           Control.Monad                   (forM_, join, mzero)
