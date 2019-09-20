@@ -1,53 +1,41 @@
-{-# LANGUAGE TemplateHaskell     #-}
-{-# LANGUAGE ScopedTypeVariables #-}
-{-# LANGUAGE RecordWildCards     #-}
-{-# LANGUAGE OverloadedStrings   #-}
-{-# LANGUAGE TypeOperators       #-}
 {-# LANGUAGE DeriveGeneric       #-}
+{-# LANGUAGE OverloadedStrings   #-}
+{-# LANGUAGE RecordWildCards     #-}
+{-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE TemplateHaskell     #-}
+{-# LANGUAGE TypeOperators       #-}
 
-module JsonDataEcBlok where
+module Factom.RPC.Types.EcBlock where
 
-import           System.Exit                    ( exitFailure
-                                                , exitSuccess
-                                                )
-import           System.IO                      ( stderr
-                                                , hPutStrLn
-                                                )
-import qualified Data.ByteString.Lazy.Char8    as BSL
-import           System.Environment             ( getArgs )
-import           Control.Monad                  ( forM_
-                                                , mzero
-                                                , join
-                                                )
 import           Control.Applicative
+import           Control.Monad                   (forM_, join, mzero)
+import           Data.Aeson                      (FromJSON (..), ToJSON (..),
+                                                  Value (..), decode, object,
+                                                  pairs, (.:), (.:?), (.=))
 import           Data.Aeson.AutoType.Alternative
-import           Data.Aeson                     ( decode
-                                                , Value(..)
-                                                , FromJSON(..)
-                                                , ToJSON(..)
-                                                , pairs
-                                                , (.:)
-                                                , (.:?)
-                                                , (.=)
-                                                , object
-                                                )
+import qualified Data.ByteString.Lazy.Char8      as BSL
 import           Data.Monoid
-import           Data.Text                      ( Text )
+import           Data.Text                       (Text)
 import qualified GHC.Generics
+import           System.Environment              (getArgs)
+import           System.Exit                     (exitFailure, exitSuccess)
+import           System.IO                       (hPutStrLn, stderr)
+
+--------------------------------------------------------------------------------
 
 -- | Workaround for https://github.com/bos/aeson/issues/287.
 o .:?? val = fmap join (o .:? val)
 
 
 data EntriesElt = EntriesElt {
-    entriesEltEntryhash :: (Maybe (Text:|:[(Maybe Value)])),
-    entriesEltCredits :: (Maybe (Double:|:[(Maybe Value)])),
-    entriesEltVersion :: (Maybe (Double:|:[(Maybe Value)])),
-    entriesEltSig :: (Maybe (Text:|:[(Maybe Value)])),
+    entriesEltEntryhash         :: (Maybe (Text:|:[(Maybe Value)])),
+    entriesEltCredits           :: (Maybe (Double:|:[(Maybe Value)])),
+    entriesEltVersion           :: (Maybe (Double:|:[(Maybe Value)])),
+    entriesEltSig               :: (Maybe (Text:|:[(Maybe Value)])),
     entriesEltServerindexnumber :: (Maybe (Double:|:[(Maybe Value)])),
-    entriesEltMillitime :: (Maybe (Text:|:[(Maybe Value)])),
-    entriesEltNumber :: (Maybe (Double:|:[(Maybe Value)])),
-    entriesEltEcpubkey :: (Maybe (Text:|:[(Maybe Value)]))
+    entriesEltMillitime         :: (Maybe (Text:|:[(Maybe Value)])),
+    entriesEltNumber            :: (Maybe (Double:|:[(Maybe Value)])),
+    entriesEltEcpubkey          :: (Maybe (Text:|:[(Maybe Value)]))
   } deriving (Show,Eq,GHC.Generics.Generic)
 
 
@@ -120,15 +108,15 @@ instance ToJSON Body where
 
 
 data Header = Header {
-    headerPrevheaderhash :: Text,
-    headerBodyhash :: Text,
-    headerBodysize :: Double,
-    headerPrevfullhash :: Text,
-    headerChainid :: Text,
-    headerEcchainid :: Text,
-    headerDbheight :: Double,
+    headerPrevheaderhash      :: Text,
+    headerBodyhash            :: Text,
+    headerBodysize            :: Double,
+    headerPrevfullhash        :: Text,
+    headerChainid             :: Text,
+    headerEcchainid           :: Text,
+    headerDbheight            :: Double,
     headerHeaderexpansionarea :: Text,
-    headerObjectcount :: Double
+    headerObjectcount         :: Double
   } deriving (Show,Eq,GHC.Generics.Generic)
 
 
@@ -191,7 +179,7 @@ instance ToJSON Header where
 
 
 data Ecblock = Ecblock {
-    ecblockBody :: Body,
+    ecblockBody   :: Body,
     ecblockHeader :: Header
   } deriving (Show,Eq,GHC.Generics.Generic)
 
@@ -208,46 +196,19 @@ instance ToJSON Ecblock where
     pairs ("body" .= ecblockBody <> "header" .= ecblockHeader)
 
 
-data TopLevel = TopLevel {
+data ECBlock = ECBlock {
     topLevelRawdata :: Text,
     topLevelEcblock :: Ecblock
   } deriving (Show,Eq,GHC.Generics.Generic)
 
 
-instance FromJSON TopLevel where
-  parseJSON (Object v) = TopLevel <$> v .: "rawdata" <*> v .: "ecblock"
+instance FromJSON ECBlock where
+  parseJSON (Object v) = ECBlock <$> v .: "rawdata" <*> v .: "ecblock"
   parseJSON _          = mzero
 
 
-instance ToJSON TopLevel where
-  toJSON (TopLevel {..}) =
+instance ToJSON ECBlock where
+  toJSON (ECBlock {..}) =
     object ["rawdata" .= topLevelRawdata, "ecblock" .= topLevelEcblock]
-  toEncoding (TopLevel {..}) =
+  toEncoding (ECBlock {..}) =
     pairs ("rawdata" .= topLevelRawdata <> "ecblock" .= topLevelEcblock)
-
-
-
-
-parse :: FilePath -> IO TopLevel
-parse filename = do
-  input <- BSL.readFile filename
-  case decode input of
-    Nothing -> fatal $ case (decode input :: Maybe Value) of
-      Nothing -> "Invalid JSON file: " ++ filename
-      Just v  -> "Mismatched JSON value from file: " ++ filename
-    Just r -> return (r :: TopLevel)
- where
-  fatal :: String -> IO a
-  fatal msg = do
-    hPutStrLn stderr msg
-    exitFailure
-
-main :: IO ()
-main = do
-  filenames <- getArgs
-  forM_
-    filenames
-    (\f -> parse f >>= (\p -> p `seq` putStrLn $ "Successfully parsed " ++ f))
-  exitSuccess
-
-

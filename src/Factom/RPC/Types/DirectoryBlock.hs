@@ -1,39 +1,27 @@
-{-# LANGUAGE TemplateHaskell     #-}
-{-# LANGUAGE ScopedTypeVariables #-}
-{-# LANGUAGE RecordWildCards     #-}
-{-# LANGUAGE OverloadedStrings   #-}
-{-# LANGUAGE TypeOperators       #-}
 {-# LANGUAGE DeriveGeneric       #-}
+{-# LANGUAGE OverloadedStrings   #-}
+{-# LANGUAGE RecordWildCards     #-}
+{-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE TemplateHaskell     #-}
+{-# LANGUAGE TypeOperators       #-}
 
 module JsonDataDirectoryBlock where
 
-import           System.Exit                    ( exitFailure
-                                                , exitSuccess
-                                                )
-import           System.IO                      ( stderr
-                                                , hPutStrLn
-                                                )
-import qualified Data.ByteString.Lazy.Char8    as BSL
-import           System.Environment             ( getArgs )
-import           Control.Monad                  ( forM_
-                                                , mzero
-                                                , join
-                                                )
 import           Control.Applicative
+import           Control.Monad                   (forM_, join, mzero)
+import           Data.Aeson                      (FromJSON (..), ToJSON (..),
+                                                  Value (..), decode, object,
+                                                  pairs, (.:), (.:?), (.=))
 import           Data.Aeson.AutoType.Alternative
-import           Data.Aeson                     ( decode
-                                                , Value(..)
-                                                , FromJSON(..)
-                                                , ToJSON(..)
-                                                , pairs
-                                                , (.:)
-                                                , (.:?)
-                                                , (.=)
-                                                , object
-                                                )
+import qualified Data.ByteString.Lazy.Char8      as BSL
 import           Data.Monoid
-import           Data.Text                      ( Text )
+import           Data.Text                       (Text)
 import qualified GHC.Generics
+import           System.Environment              (getArgs)
+import           System.Exit                     (exitFailure, exitSuccess)
+import           System.IO                       (hPutStrLn, stderr)
+
+--------------------------------------------------------------------------------
 
 -- | Workaround for https://github.com/bos/aeson/issues/287.
 o .:?? val = fmap join (o .:? val)
@@ -42,7 +30,7 @@ o .:?? val = fmap join (o .:? val)
 data Header = Header {
     headerSequencenumber :: Double,
     headerPrevblockkeymr :: Text,
-    headerTimestamp :: Double
+    headerTimestamp      :: Double
   } deriving (Show,Eq,GHC.Generics.Generic)
 
 
@@ -76,7 +64,7 @@ instance ToJSON Header where
 
 data EntryblocklistElt = EntryblocklistElt {
     entryblocklistEltChainid :: Text,
-    entryblocklistEltKeymr :: Text
+    entryblocklistEltKeymr   :: Text
   } deriving (Show,Eq,GHC.Generics.Generic)
 
 
@@ -92,46 +80,19 @@ instance ToJSON EntryblocklistElt where
     ("chainid" .= entryblocklistEltChainid <> "keymr" .= entryblocklistEltKeymr)
 
 
-data TopLevel = TopLevel {
-    topLevelHeader :: Header,
+data DirectoryBlock = DirectoryBlock {
+    topLevelHeader         :: Header,
     topLevelEntryblocklist :: [EntryblocklistElt]
   } deriving (Show,Eq,GHC.Generics.Generic)
 
 
-instance FromJSON TopLevel where
-  parseJSON (Object v) = TopLevel <$> v .: "header" <*> v .: "entryblocklist"
+instance FromJSON DirectoryBlock where
+  parseJSON (Object v) = DirectoryBlock <$> v .: "header" <*> v .: "entryblocklist"
   parseJSON _          = mzero
 
 
-instance ToJSON TopLevel where
-  toJSON (TopLevel {..}) = object
+instance ToJSON DirectoryBlock where
+  toJSON (DirectoryBlock {..}) = object
     ["header" .= topLevelHeader, "entryblocklist" .= topLevelEntryblocklist]
-  toEncoding (TopLevel {..}) = pairs
+  toEncoding (DirectoryBlock {..}) = pairs
     ("header" .= topLevelHeader <> "entryblocklist" .= topLevelEntryblocklist)
-
-
-
-
-parse :: FilePath -> IO TopLevel
-parse filename = do
-  input <- BSL.readFile filename
-  case decode input of
-    Nothing -> fatal $ case (decode input :: Maybe Value) of
-      Nothing -> "Invalid JSON file: " ++ filename
-      Just v  -> "Mismatched JSON value from file: " ++ filename
-    Just r -> return (r :: TopLevel)
- where
-  fatal :: String -> IO a
-  fatal msg = do
-    hPutStrLn stderr msg
-    exitFailure
-
-main :: IO ()
-main = do
-  filenames <- getArgs
-  forM_
-    filenames
-    (\f -> parse f >>= (\p -> p `seq` putStrLn $ "Successfully parsed " ++ f))
-  exitSuccess
-
-
