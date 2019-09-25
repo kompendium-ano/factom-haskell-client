@@ -26,7 +26,6 @@ import           System.IO                       (hPutStrLn, stderr)
 -- | Workaround for https://github.com/bos/aeson/issues/287.
 o .:?? val = fmap join (o .:? val)
 
-
 data EntriesElt = EntriesElt {
     entriesEltEntryhash         :: (Maybe (Text:|:[(Maybe Value)])),
     entriesEltCredits           :: (Maybe (Double:|:[(Maybe Value)])),
@@ -212,3 +211,7 @@ instance ToJSON ECBlock where
     object ["rawdata" .= topLevelRawdata, "ecblock" .= topLevelEcblock]
   toEncoding (ECBlock {..}) =
     pairs ("rawdata" .= topLevelRawdata <> "ecblock" .= topLevelEcblock)
+
+
+
+-- brittany --write-mode=inplace | json-autotype json-data/directory-block-head.json -o json-data/DirectoryBlockHeader.hsx
