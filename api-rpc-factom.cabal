@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 8291ec44c329a10fce52f7ac5cd5f4a3939d67b708acd7802fb858309168955d
+-- hash: e9c8cd339336251807397ff526df250a312086dde3964decb447dc09987cf36d
 
 name:           api-rpc-factom
 version:        0.1.3.2
@@ -39,6 +39,7 @@ library
       Factom.RPC.Types.DirectoryBlock
       Factom.RPC.Types.DirectoryBlockHead
       Factom.RPC.Types.EcBlock
+      Factom.RPC.Types.Entry
       Factom.RPC.Types.Heights
       Factom.RPC.Utils
       Paths_api_rpc_factom
