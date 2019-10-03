@@ -84,7 +84,7 @@ reqConfiguration =
 -- |
 --
 -- process-list
-reqProccessList :: RPC ()
+reqProcessList :: RPC ()
 reqProcessList =
   method "process-list" None
 
