@@ -1,90 +1,146 @@
-{-# LANGUAGE TemplateHaskell     #-}
-{-# LANGUAGE ScopedTypeVariables #-}
-{-# LANGUAGE RecordWildCards     #-}
-{-# LANGUAGE OverloadedStrings   #-}
-{-# LANGUAGE TypeOperators       #-}
 {-# LANGUAGE DeriveGeneric       #-}
+{-# LANGUAGE OverloadedStrings   #-}
+{-# LANGUAGE RecordWildCards     #-}
+{-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE TemplateHaskell     #-}
+{-# LANGUAGE TypeOperators       #-}
 
 module AddOutput where
 
-import           System.Exit        (exitFailure, exitSuccess)
-import           System.IO          (stderr, hPutStrLn)
-import qualified Data.ByteString.Lazy.Char8 as BSL
-import           System.Environment (getArgs)
-import           Control.Monad      (forM_, mzero, join)
 import           Control.Applicative
+import           Control.Monad                  ( forM_
+                                                , join
+                                                , mzero
+                                                )
+import           Data.Aeson                     ( FromJSON(..)
+                                                , ToJSON(..)
+                                                , Value(..)
+                                                , decode
+                                                , object
+                                                , pairs
+                                                , (.:)
+                                                , (.:?)
+                                                , (.=)
+                                                )
 import           Data.Aeson.AutoType.Alternative
-import           Data.Aeson(decode, Value(..), FromJSON(..), ToJSON(..),
-                            pairs,
-                            (.:), (.:?), (.=), object)
+import qualified Data.ByteString.Lazy.Char8    as BSL
 import           Data.Monoid
-import           Data.Text (Text)
+import           Data.Text                      ( Text )
 import qualified GHC.Generics
+import           System.Environment             ( getArgs )
+import           System.Exit                    ( exitFailure
+                                                , exitSuccess
+                                                )
+import           System.IO                      ( hPutStrLn
+                                                , stderr
+                                                )
 
 -- | Workaround for https://github.com/bos/aeson/issues/287.
 o .:?? val = fmap join (o .:? val)
 
 
-data OutputsElt = OutputsElt { 
-    outputsEltAmount :: Double,
+data OutputsElt = OutputsElt {
+    outputsEltAmount  :: Double,
     outputsEltAddress :: Text
   } deriving (Show,Eq,GHC.Generics.Generic)
 
 
 instance FromJSON OutputsElt where
-  parseJSON (Object v) = OutputsElt <$> v .:   "amount" <*> v .:   "address"
+  parseJSON (Object v) = OutputsElt <$> v .: "amount" <*> v .: "address"
   parseJSON _          = mzero
 
 
 instance ToJSON OutputsElt where
-  toJSON     (OutputsElt {..}) = object ["amount" .= outputsEltAmount, "address" .= outputsEltAddress]
-  toEncoding (OutputsElt {..}) = pairs  ("amount" .= outputsEltAmount<>"address" .= outputsEltAddress)
+  toJSON (OutputsElt {..}) =
+    object ["amount" .= outputsEltAmount, "address" .= outputsEltAddress]
+  toEncoding (OutputsElt {..}) =
+    pairs ("amount" .= outputsEltAmount <> "address" .= outputsEltAddress)
 
 
-data TopLevel = TopLevel { 
-    topLevelFeesrequired :: Double,
-    topLevelEcoutputs :: (Maybe Value),
-    topLevelSigned :: Bool,
-    topLevelInputs :: [OutputsElt],
-    topLevelOutputs :: [OutputsElt],
-    topLevelName :: Text,
-    topLevelTotalinputs :: Double,
+data TopLevel = TopLevel {
+    topLevelFeesrequired   :: Double,
+    topLevelEcoutputs      :: (Maybe Value),
+    topLevelSigned         :: Bool,
+    topLevelInputs         :: [OutputsElt],
+    topLevelOutputs        :: [OutputsElt],
+    topLevelName           :: Text,
+    topLevelTotalinputs    :: Double,
     topLevelTotalecoutputs :: Double,
-    topLevelTimestamp :: Double,
-    topLevelTotaloutputs :: Double,
-    topLevelTxid :: Text,
-    topLevelFeespaid :: Double
+    topLevelTimestamp      :: Double,
+    topLevelTotaloutputs   :: Double,
+    topLevelTxid           :: Text,
+    topLevelFeespaid       :: Double
   } deriving (Show,Eq,GHC.Generics.Generic)
 
 
 instance FromJSON TopLevel where
-  parseJSON (Object v) = TopLevel <$> v .:   "feesrequired" <*> v .:?? "ecoutputs" <*> v .:   "signed" <*> v .:   "inputs" <*> v .:   "outputs" <*> v .:   "name" <*> v .:   "totalinputs" <*> v .:   "totalecoutputs" <*> v .:   "timestamp" <*> v .:   "totaloutputs" <*> v .:   "txid" <*> v .:   "feespaid"
-  parseJSON _          = mzero
+  parseJSON (Object v) =
+    TopLevel
+      <$>  v
+      .:   "feesrequired"
+      <*>  v
+      .:?? "ecoutputs"
+      <*>  v
+      .:   "signed"
+      <*>  v
+      .:   "inputs"
+      <*>  v
+      .:   "outputs"
+      <*>  v
+      .:   "name"
+      <*>  v
+      .:   "totalinputs"
+      <*>  v
+      .:   "totalecoutputs"
+      <*>  v
+      .:   "timestamp"
+      <*>  v
+      .:   "totaloutputs"
+      <*>  v
+      .:   "txid"
+      <*>  v
+      .:   "feespaid"
+  parseJSON _ = mzero
 
 
 instance ToJSON TopLevel where
-  toJSON     (TopLevel {..}) = object ["feesrequired" .= topLevelFeesrequired, "ecoutputs" .= topLevelEcoutputs, "signed" .= topLevelSigned, "inputs" .= topLevelInputs, "outputs" .= topLevelOutputs, "name" .= topLevelName, "totalinputs" .= topLevelTotalinputs, "totalecoutputs" .= topLevelTotalecoutputs, "timestamp" .= topLevelTimestamp, "totaloutputs" .= topLevelTotaloutputs, "txid" .= topLevelTxid, "feespaid" .= topLevelFeespaid]
-  toEncoding (TopLevel {..}) = pairs  ("feesrequired" .= topLevelFeesrequired<>"ecoutputs" .= topLevelEcoutputs<>"signed" .= topLevelSigned<>"inputs" .= topLevelInputs<>"outputs" .= topLevelOutputs<>"name" .= topLevelName<>"totalinputs" .= topLevelTotalinputs<>"totalecoutputs" .= topLevelTotalecoutputs<>"timestamp" .= topLevelTimestamp<>"totaloutputs" .= topLevelTotaloutputs<>"txid" .= topLevelTxid<>"feespaid" .= topLevelFeespaid)
-
-
-
-
-parse :: FilePath -> IO TopLevel
-parse filename = do input <- BSL.readFile filename
-                    case decode input of
-                      Nothing -> fatal $ case (decode input :: Maybe Value) of
-                                           Nothing -> "Invalid JSON file: "     ++ filename
-                                           Just v  -> "Mismatched JSON value from file: " ++ filename
-                      Just r  -> return (r :: TopLevel)
-  where
-    fatal :: String -> IO a
-    fatal msg = do hPutStrLn stderr msg
-                   exitFailure
-
-main :: IO ()
-main = do
-  filenames <- getArgs
-  forM_ filenames (\f -> parse f >>= (\p -> p `seq` putStrLn $ "Successfully parsed " ++ f))
-  exitSuccess
-
-
+  toJSON (TopLevel {..}) = object
+    [ "feesrequired" .= topLevelFeesrequired
+    , "ecoutputs" .= topLevelEcoutputs
+    , "signed" .= topLevelSigned
+    , "inputs" .= topLevelInputs
+    , "outputs" .= topLevelOutputs
+    , "name" .= topLevelName
+    , "totalinputs" .= topLevelTotalinputs
+    , "totalecoutputs" .= topLevelTotalecoutputs
+    , "timestamp" .= topLevelTimestamp
+    , "totaloutputs" .= topLevelTotaloutputs
+    , "txid" .= topLevelTxid
+    , "feespaid" .= topLevelFeespaid
+    ]
+  toEncoding (TopLevel {..}) = pairs
+    (  "feesrequired"
+    .= topLevelFeesrequired
+    <> "ecoutputs"
+    .= topLevelEcoutputs
+    <> "signed"
+    .= topLevelSigned
+    <> "inputs"
+    .= topLevelInputs
+    <> "outputs"
+    .= topLevelOutputs
+    <> "name"
+    .= topLevelName
+    <> "totalinputs"
+    .= topLevelTotalinputs
+    <> "totalecoutputs"
+    .= topLevelTotalecoutputs
+    <> "timestamp"
+    .= topLevelTimestamp
+    <> "totaloutputs"
+    .= topLevelTotaloutputs
+    <> "txid"
+    .= topLevelTxid
+    <> "feespaid"
+    .= topLevelFeespaid
+    )

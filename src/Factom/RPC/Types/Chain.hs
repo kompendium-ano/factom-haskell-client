@@ -1,99 +1,125 @@
-{-# LANGUAGE TemplateHaskell     #-}
-{-# LANGUAGE ScopedTypeVariables #-}
-{-# LANGUAGE RecordWildCards     #-}
-{-# LANGUAGE OverloadedStrings   #-}
-{-# LANGUAGE TypeOperators       #-}
 {-# LANGUAGE DeriveGeneric       #-}
+{-# LANGUAGE OverloadedStrings   #-}
+{-# LANGUAGE RecordWildCards     #-}
+{-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE TemplateHaskell     #-}
+{-# LANGUAGE TypeOperators       #-}
 
 module Chain where
 
-import           System.Exit        (exitFailure, exitSuccess)
-import           System.IO          (stderr, hPutStrLn)
-import qualified Data.ByteString.Lazy.Char8 as BSL
-import           System.Environment (getArgs)
-import           Control.Monad      (forM_, mzero, join)
 import           Control.Applicative
+import           Control.Monad                  ( forM_
+                                                , join
+                                                , mzero
+                                                )
+import           Data.Aeson                     ( FromJSON(..)
+                                                , ToJSON(..)
+                                                , Value(..)
+                                                , decode
+                                                , object
+                                                , pairs
+                                                , (.:)
+                                                , (.:?)
+                                                , (.=)
+                                                )
 import           Data.Aeson.AutoType.Alternative
-import           Data.Aeson(decode, Value(..), FromJSON(..), ToJSON(..),
-                            pairs,
-                            (.:), (.:?), (.=), object)
+import qualified Data.ByteString.Lazy.Char8    as BSL
 import           Data.Monoid
-import           Data.Text (Text)
+import           Data.Text                      ( Text )
 import qualified GHC.Generics
+import           System.Environment             ( getArgs )
+import           System.Exit                    ( exitFailure
+                                                , exitSuccess
+                                                )
+import           System.IO                      ( hPutStrLn
+                                                , stderr
+                                                )
 
 -- | Workaround for https://github.com/bos/aeson/issues/287.
 o .:?? val = fmap join (o .:? val)
 
 
-data LinksElt = LinksElt { 
+data LinksElt = LinksElt {
     linksEltHref :: Text,
-    linksEltRel :: Text
+    linksEltRel  :: Text
   } deriving (Show,Eq,GHC.Generics.Generic)
 
 
 instance FromJSON LinksElt where
-  parseJSON (Object v) = LinksElt <$> v .:   "href" <*> v .:   "rel"
+  parseJSON (Object v) = LinksElt <$> v .: "href" <*> v .: "rel"
   parseJSON _          = mzero
 
 
 instance ToJSON LinksElt where
-  toJSON     (LinksElt {..}) = object ["href" .= linksEltHref, "rel" .= linksEltRel]
-  toEncoding (LinksElt {..}) = pairs  ("href" .= linksEltHref<>"rel" .= linksEltRel)
+  toJSON (LinksElt {..}) =
+    object ["href" .= linksEltHref, "rel" .= linksEltRel]
+  toEncoding (LinksElt {..}) =
+    pairs ("href" .= linksEltHref <> "rel" .= linksEltRel)
 
 
-data Result = Result { 
-    resultStatus :: Text,
+data Result = Result {
+    resultStatus    :: Text,
     resultCreatedAt :: Text,
-    resultChainId :: Text,
-    resultExtIds :: [Text],
-    resultLinks :: [LinksElt],
-    resultSynced :: Bool
+    resultChainId   :: Text,
+    resultExtIds    :: [Text],
+    resultLinks     :: [LinksElt],
+    resultSynced    :: Bool
   } deriving (Show,Eq,GHC.Generics.Generic)
 
 
 instance FromJSON Result where
-  parseJSON (Object v) = Result <$> v .:   "status" <*> v .:   "createdAt" <*> v .:   "chainId" <*> v .:   "extIds" <*> v .:   "links" <*> v .:   "synced"
-  parseJSON _          = mzero
+  parseJSON (Object v) =
+    Result
+      <$> v
+      .:  "status"
+      <*> v
+      .:  "createdAt"
+      <*> v
+      .:  "chainId"
+      <*> v
+      .:  "extIds"
+      <*> v
+      .:  "links"
+      <*> v
+      .:  "synced"
+  parseJSON _ = mzero
 
 
 instance ToJSON Result where
-  toJSON     (Result {..}) = object ["status" .= resultStatus, "createdAt" .= resultCreatedAt, "chainId" .= resultChainId, "extIds" .= resultExtIds, "links" .= resultLinks, "synced" .= resultSynced]
-  toEncoding (Result {..}) = pairs  ("status" .= resultStatus<>"createdAt" .= resultCreatedAt<>"chainId" .= resultChainId<>"extIds" .= resultExtIds<>"links" .= resultLinks<>"synced" .= resultSynced)
+  toJSON (Result {..}) = object
+    [ "status" .= resultStatus
+    , "createdAt" .= resultCreatedAt
+    , "chainId" .= resultChainId
+    , "extIds" .= resultExtIds
+    , "links" .= resultLinks
+    , "synced" .= resultSynced
+    ]
+  toEncoding (Result {..}) = pairs
+    (  "status"
+    .= resultStatus
+    <> "createdAt"
+    .= resultCreatedAt
+    <> "chainId"
+    .= resultChainId
+    <> "extIds"
+    .= resultExtIds
+    <> "links"
+    .= resultLinks
+    <> "synced"
+    .= resultSynced
+    )
 
 
-data TopLevel = TopLevel { 
+data TopLevel = TopLevel {
     topLevelResult :: Result
   } deriving (Show,Eq,GHC.Generics.Generic)
 
 
 instance FromJSON TopLevel where
-  parseJSON (Object v) = TopLevel <$> v .:   "result"
+  parseJSON (Object v) = TopLevel <$> v .: "result"
   parseJSON _          = mzero
 
 
 instance ToJSON TopLevel where
-  toJSON     (TopLevel {..}) = object ["result" .= topLevelResult]
-  toEncoding (TopLevel {..}) = pairs  ("result" .= topLevelResult)
-
-
-
-
-parse :: FilePath -> IO TopLevel
-parse filename = do input <- BSL.readFile filename
-                    case decode input of
-                      Nothing -> fatal $ case (decode input :: Maybe Value) of
-                                           Nothing -> "Invalid JSON file: "     ++ filename
-                                           Just v  -> "Mismatched JSON value from file: " ++ filename
-                      Just r  -> return (r :: TopLevel)
-  where
-    fatal :: String -> IO a
-    fatal msg = do hPutStrLn stderr msg
-                   exitFailure
-
-main :: IO ()
-main = do
-  filenames <- getArgs
-  forM_ filenames (\f -> parse f >>= (\p -> p `seq` putStrLn $ "Successfully parsed " ++ f))
-  exitSuccess
-
-
+  toJSON (TopLevel {..}) = object ["result" .= topLevelResult]
+  toEncoding (TopLevel {..}) = pairs ("result" .= topLevelResult)
