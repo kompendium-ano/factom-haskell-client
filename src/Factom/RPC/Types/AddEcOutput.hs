@@ -1,11 +1,11 @@
-{-# LANGUAGE DeriveGeneric       #-}
+gi{-# LANGUAGE DeriveGeneric       #-}
 {-# LANGUAGE OverloadedStrings   #-}
 {-# LANGUAGE RecordWildCards     #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TemplateHaskell     #-}
 {-# LANGUAGE TypeOperators       #-}
 
-module AddEcOutput where
+module  Factom.RPC.Types.AddEcOutput where
 
 import           Control.Applicative
 import           Control.Monad                  ( forM_

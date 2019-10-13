@@ -5,7 +5,7 @@
 {-# LANGUAGE TemplateHaskell     #-}
 {-# LANGUAGE TypeOperators       #-}
 
-module PendingEntries where
+module  Factom.RPC.Types.PendingEntries where
 
 import           Control.Applicative
 import           Control.Monad                   (forM_, join, mzero)

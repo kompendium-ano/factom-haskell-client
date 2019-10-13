@@ -5,7 +5,7 @@
 {-# LANGUAGE TemplateHaskell     #-}
 {-# LANGUAGE TypeOperators       #-}
 
-module Remove where
+module  Factom.RPC.Types.Remove where
 
 import           Control.Applicative
 import           Control.Monad                   (forM_, join, mzero)

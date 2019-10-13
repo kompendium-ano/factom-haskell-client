@@ -5,7 +5,7 @@
 {-# LANGUAGE TemplateHaskell     #-}
 {-# LANGUAGE TypeOperators       #-}
 
-module UnlockWallet where
+module  Factom.RPC.Types.UnlockWallet where
 
 import           Control.Applicative
 import           Control.Monad                   (forM_, join, mzero)

@@ -5,7 +5,7 @@
 {-# LANGUAGE TemplateHaskell     #-}
 {-# LANGUAGE TypeOperators       #-}
 
-module WalletBalances where
+module  Factom.RPC.Types.WalletBalances where
 
 import           Control.Applicative
 import           Control.Monad                   (forM_, join, mzero)

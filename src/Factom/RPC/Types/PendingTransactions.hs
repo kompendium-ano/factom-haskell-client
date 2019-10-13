@@ -5,7 +5,7 @@
 {-# LANGUAGE TemplateHaskell     #-}
 {-# LANGUAGE TypeOperators       #-}
 
-module PendingTransactions where
+module  Factom.RPC.Types.PendingTransactions where
 
 import           Control.Applicative
 import           Control.Monad                   (forM_, join, mzero)

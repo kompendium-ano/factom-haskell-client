@@ -5,7 +5,7 @@
 {-# LANGUAGE TemplateHaskell     #-}
 {-# LANGUAGE TypeOperators       #-}
 
-module MultipleEcBalances where
+module  Factom.RPC.Types.MultipleEcBalances where
 
 import           Control.Applicative
 import           Control.Monad                   (forM_, join, mzero)
