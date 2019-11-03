@@ -9,7 +9,7 @@
 {-# LANGUAGE TypeFamilies               #-}
 {-# LANGUAGE TypeOperators              #-}
 
-module Factom.RPC.Wallet.Api where
+module Factom.RPC.Debug where
 
 import           Control.Concurrent
 import           Control.Exception                (bracket)
@@ -32,41 +32,24 @@ import           Factom.RPC.JsonRpc               (JsonRpcT, runJsonRpcT)
 
 --------------------------------------------------------------------------------
 
-endpoint = "http://localhost:8089/v2"
+endpoint  = "http://localhost:8088/debug"
+endpointRemote = "http://dev.factomd.net/v2/debug"
 
--- active-identity-keys
--- add-ec-output
--- add-fee
--- add-input
--- add-output
--- address
--- all-addresses
--- all-identity-keys
--- compose-chain
--- compose-entry
--- compose-identity-attribute
--- compose-identity-attribute-endorsement
--- compose-identity-chain
--- compose-identity-key-replacement
--- compose-transaction
--- delete-transaction
--- generate-ec-address
--- generate-factoid-address
--- generate-identity-key
--- get-height
--- identity-key
--- import-addresses
--- import-identity-keys
--- import-koinify
--- new-transaction
--- properties
--- remove-address
--- remove-identity-key
--- sign-data
--- sign-transaction
--- sub-fee
--- tmp-transactions
--- transactions (Retrieving)
--- unlock-wallet
--- wallet-backup
--- wallet-balances
+reqHoldingQueue :: RPC ()
+reqHoldingQueue =
+  method "holding-queue" None
+
+-- network-info
+-- predictive-fer
+-- audit-servers
+-- federated-servers
+-- configuration
+-- process-list
+-- authorities
+-- reload-configuration
+-- drop-rate
+-- set-drop-rate
+-- delay
+-- set-delay
+-- summary
+-- messages
