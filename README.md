@@ -15,7 +15,6 @@ To run and test fromrepository
 ```bash
 $ stack build
 ```
-
 2. Load REPL with stack for evaluation
 ```
 $ stack repl
