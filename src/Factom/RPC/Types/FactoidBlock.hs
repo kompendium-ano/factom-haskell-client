@@ -1,48 +1,36 @@
-{-# LANGUAGE TemplateHaskell     #-}
-{-# LANGUAGE ScopedTypeVariables #-}
-{-# LANGUAGE RecordWildCards     #-}
-{-# LANGUAGE OverloadedStrings   #-}
-{-# LANGUAGE TypeOperators       #-}
 {-# LANGUAGE DeriveGeneric       #-}
+{-# LANGUAGE OverloadedStrings   #-}
+{-# LANGUAGE RecordWildCards     #-}
+{-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE TemplateHaskell     #-}
+{-# LANGUAGE TypeOperators       #-}
 
-module JsonDataFactoidBlock where
+module Factom.RPC.Types.FactoidBlock where
 
-import           System.Exit                    ( exitFailure
-                                                , exitSuccess
-                                                )
-import           System.IO                      ( stderr
-                                                , hPutStrLn
-                                                )
-import qualified Data.ByteString.Lazy.Char8    as BSL
-import           System.Environment             ( getArgs )
-import           Control.Monad                  ( forM_
-                                                , mzero
-                                                , join
-                                                )
 import           Control.Applicative
+import           Control.Monad                   (forM_, join, mzero)
+import           Data.Aeson                      (FromJSON (..), ToJSON (..),
+                                                  Value (..), decode, object,
+                                                  pairs, (.:), (.:?), (.=))
 import           Data.Aeson.AutoType.Alternative
-import           Data.Aeson                     ( decode
-                                                , Value(..)
-                                                , FromJSON(..)
-                                                , ToJSON(..)
-                                                , pairs
-                                                , (.:)
-                                                , (.:?)
-                                                , (.=)
-                                                , object
-                                                )
+import qualified Data.ByteString.Lazy.Char8      as BSL
 import           Data.Monoid
-import           Data.Text                      ( Text )
+import           Data.Text                       (Text)
 import qualified GHC.Generics
+import           System.Environment              (getArgs)
+import           System.Exit                     (exitFailure, exitSuccess)
+import           System.IO                       (hPutStrLn, stderr)
+
+--------------------------------------------------------------------------------
 
 -- | Workaround for https://github.com/bos/aeson/issues/287.
 o .:?? val = fmap join (o .:? val)
 
 
 data OutputsElt = OutputsElt {
-    outputsEltAmount :: Double,
+    outputsEltAmount      :: Double,
     outputsEltUseraddress :: Text,
-    outputsEltAddress :: Text
+    outputsEltAddress     :: Text
   } deriving (Show,Eq,GHC.Generics.Generic)
 
 
@@ -85,14 +73,14 @@ instance ToJSON SigblocksElt where
 
 
 data TransactionsElt = TransactionsElt {
-    transactionsEltInputs :: [OutputsElt:|:[(Maybe Value)]],
-    transactionsEltOutecs :: [[(Maybe Value)]],
+    transactionsEltInputs         :: [OutputsElt:|:[(Maybe Value)]],
+    transactionsEltOutecs         :: [[(Maybe Value)]],
     transactionsEltMillitimestamp :: Double,
-    transactionsEltOutputs :: [OutputsElt:|:[(Maybe Value)]],
-    transactionsEltSigblocks :: [SigblocksElt:|:[(Maybe Value)]],
-    transactionsEltBlockheight :: Double,
-    transactionsEltRcds :: [Text:|:[(Maybe Value)]],
-    transactionsEltTxid :: Text
+    transactionsEltOutputs        :: [OutputsElt:|:[(Maybe Value)]],
+    transactionsEltSigblocks      :: [SigblocksElt:|:[(Maybe Value)]],
+    transactionsEltBlockheight    :: Double,
+    transactionsEltRcds           :: [Text:|:[(Maybe Value)]],
+    transactionsEltTxid           :: Text
   } deriving (Show,Eq,GHC.Generics.Generic)
 
 
@@ -150,15 +138,15 @@ instance ToJSON TransactionsElt where
 
 
 data Fblock = Fblock {
-    fblockBodymr :: Text,
-    fblockTransactions :: [TransactionsElt],
-    fblockChainid :: Text,
-    fblockDbheight :: Double,
+    fblockBodymr          :: Text,
+    fblockTransactions    :: [TransactionsElt],
+    fblockChainid         :: Text,
+    fblockDbheight        :: Double,
     fblockPrevledgerkeymr :: Text,
-    fblockExchrate :: Double,
-    fblockLedgerkeymr :: Text,
-    fblockKeymr :: Text,
-    fblockPrevkeymr :: Text
+    fblockExchrate        :: Double,
+    fblockLedgerkeymr     :: Text,
+    fblockKeymr           :: Text,
+    fblockPrevkeymr       :: Text
   } deriving (Show,Eq,GHC.Generics.Generic)
 
 
@@ -222,7 +210,7 @@ instance ToJSON Fblock where
 
 data TopLevel = TopLevel {
     topLevelRawdata :: Text,
-    topLevelFblock :: Fblock
+    topLevelFblock  :: Fblock
   } deriving (Show,Eq,GHC.Generics.Generic)
 
 
@@ -261,5 +249,3 @@ main = do
     filenames
     (\f -> parse f >>= (\p -> p `seq` putStrLn $ "Successfully parsed " ++ f))
   exitSuccess
-
-

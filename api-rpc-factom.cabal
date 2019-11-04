@@ -30,10 +30,12 @@ library
       Factom.RPC.JsonRpc
       Factom.RPC.Types.Ack
       Factom.RPC.Types.AdminBlock
+      Factom.RPC.Types.Anchors
       Factom.RPC.Types.DirectoryBlock
       Factom.RPC.Types.DirectoryBlockHead
       Factom.RPC.Types.EcBlock
       Factom.RPC.Types.Entry
+      Factom.RPC.Types.FactoidBlock
       Factom.RPC.Types.Heights
       Factom.RPC.Utils
       Paths_api_rpc_factom

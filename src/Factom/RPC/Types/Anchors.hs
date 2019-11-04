@@ -1,46 +1,34 @@
-{-# LANGUAGE TemplateHaskell     #-}
-{-# LANGUAGE ScopedTypeVariables #-}
-{-# LANGUAGE RecordWildCards     #-}
-{-# LANGUAGE OverloadedStrings   #-}
-{-# LANGUAGE TypeOperators       #-}
 {-# LANGUAGE DeriveGeneric       #-}
+{-# LANGUAGE OverloadedStrings   #-}
+{-# LANGUAGE RecordWildCards     #-}
+{-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE TemplateHaskell     #-}
+{-# LANGUAGE TypeOperators       #-}
 
-module JsonDataAnchors where
+module Factom.RPC.Types.Anchors where
 
-import           System.Exit                    ( exitFailure
-                                                , exitSuccess
-                                                )
-import           System.IO                      ( stderr
-                                                , hPutStrLn
-                                                )
-import qualified Data.ByteString.Lazy.Char8    as BSL
-import           System.Environment             ( getArgs )
-import           Control.Monad                  ( forM_
-                                                , mzero
-                                                , join
-                                                )
 import           Control.Applicative
+import           Control.Monad                   (forM_, join, mzero)
+import           Data.Aeson                      (FromJSON (..), ToJSON (..),
+                                                  Value (..), decode, object,
+                                                  pairs, (.:), (.:?), (.=))
 import           Data.Aeson.AutoType.Alternative
-import           Data.Aeson                     ( decode
-                                                , Value(..)
-                                                , FromJSON(..)
-                                                , ToJSON(..)
-                                                , pairs
-                                                , (.:)
-                                                , (.:?)
-                                                , (.=)
-                                                , object
-                                                )
+import qualified Data.ByteString.Lazy.Char8      as BSL
 import           Data.Monoid
-import           Data.Text                      ( Text )
+import           Data.Text                       (Text)
 import qualified GHC.Generics
+import           System.Environment              (getArgs)
+import           System.Exit                     (exitFailure, exitSuccess)
+import           System.IO                       (hPutStrLn, stderr)
+
+--------------------------------------------------------------------------------
 
 -- | Workaround for https://github.com/bos/aeson/issues/287.
 o .:?? val = fmap join (o .:? val)
 
 
 data Bitcoin = Bitcoin {
-    bitcoinBlockhash :: Text,
+    bitcoinBlockhash       :: Text,
     bitcoinTransactionhash :: Text
   } deriving (Show,Eq,GHC.Generics.Generic)
 
@@ -65,9 +53,9 @@ instance ToJSON Bitcoin where
 
 
 data MerklebranchElt = MerklebranchElt {
-    merklebranchEltLeft :: Text,
+    merklebranchEltLeft  :: Text,
     merklebranchEltRight :: Text,
-    merklebranchEltTop :: Text
+    merklebranchEltTop   :: Text
   } deriving (Show,Eq,GHC.Generics.Generic)
 
 
@@ -95,14 +83,14 @@ instance ToJSON MerklebranchElt where
 
 data Ethereum = Ethereum {
     ethereumContractaddress :: Text,
-    ethereumTxindex :: Double,
-    ethereumWindowmr :: Text,
-    ethereumBlockhash :: Text,
-    ethereumDbheightmin :: Double,
-    ethereumMerklebranch :: [MerklebranchElt],
-    ethereumRecordheight :: Double,
-    ethereumDbheightmax :: Double,
-    ethereumTxid :: Text
+    ethereumTxindex         :: Double,
+    ethereumWindowmr        :: Text,
+    ethereumBlockhash       :: Text,
+    ethereumDbheightmin     :: Double,
+    ethereumMerklebranch    :: [MerklebranchElt],
+    ethereumRecordheight    :: Double,
+    ethereumDbheightmax     :: Double,
+    ethereumTxid            :: Text
   } deriving (Show,Eq,GHC.Generics.Generic)
 
 
@@ -165,10 +153,10 @@ instance ToJSON Ethereum where
 
 
 data TopLevel = TopLevel {
-    topLevelBitcoin :: Bitcoin,
+    topLevelBitcoin              :: Bitcoin,
     topLevelDirectoryblockheight :: Double,
-    topLevelDirectoryblockkeymr :: Text,
-    topLevelEthereum :: Ethereum
+    topLevelDirectoryblockkeymr  :: Text,
+    topLevelEthereum             :: Ethereum
   } deriving (Show,Eq,GHC.Generics.Generic)
 
 
@@ -228,5 +216,3 @@ main = do
     filenames
     (\f -> parse f >>= (\p -> p `seq` putStrLn $ "Successfully parsed " ++ f))
   exitSuccess
-
-
