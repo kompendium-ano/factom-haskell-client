@@ -38,21 +38,78 @@ import Factom.RPC.Wallet
 ```
 
 #### Retreiving a balance
+-- build communication session
+let s = weakSession (traceSendAPI "" $ clientSendAPI endpoint)
 
-```
-
+-- run Remote Monad
+h <- send s $ do
+         -- run specific events by executing exposed
+         h <- reqGetSyncStatus
+         return h
+-- show converted ADT
+print h
+-- or use for special business logic
 ```
 
 #### Reading Entry Data
+-- build communication session
+let s = weakSession (traceSendAPI "" $ clientSendAPI endpoint)
+
+-- run Remote Monad
+h <- send s $ do
+         -- run specific events by executing exposed
+         h <- reqGetSyncStatus
+         return h
+-- show converted ADT
+print h
+-- or use for special business logic
 ```
-```
+
 #### Writing an Entry
+-- build communication session
+let s = weakSession (traceSendAPI "" $ clientSendAPI endpoint)
+
+-- run Remote Monad
+h <- send s $ do
+         -- run specific events by executing exposed
+         h <- reqGetSyncStatus
+         return h
+-- show converted ADT
+print h
+-- or use for special business logic
+```
 
 #### Block Height and Current Minute
+-- build communication session
+let s = weakSession (traceSendAPI "" $ clientSendAPI endpoint)
+
+-- run Remote Monad
+h <- send s $ do
+         -- run specific events by executing exposed
+         h <- reqGetSyncStatus
+         return h
+-- show converted ADT
+print h
+-- or use for special business logic
+```
 
 #### Sending A Transaction
+-- build communication session
+let s = weakSession (traceSendAPI "" $ clientSendAPI endpoint)
+
+-- run Remote Monad
+h <- send s $ do
+         -- run specific events by executing exposed
+         h <- reqGetSyncStatus
+         return h
+-- show converted ADT
+print h
+-- or use for special business logic
+```
 
 ## Testing
+
+You can load REPL with `stack repl` and evaluate functionality with real-time feedback using examples provided above.
 
 ## Development
 
