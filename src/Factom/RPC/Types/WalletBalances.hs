@@ -5,7 +5,7 @@
 {-# LANGUAGE TemplateHaskell     #-}
 {-# LANGUAGE TypeOperators       #-}
 
-module Factom.RPC.Types.DirectoryBlockHead where
+module  Factom.RPC.Types.WalletBalances where
 
 import           Control.Applicative
 import           Control.Monad                   (forM_, join, mzero)
@@ -20,24 +20,49 @@ import qualified GHC.Generics
 import           System.Environment              (getArgs)
 import           System.Exit                     (exitFailure, exitSuccess)
 import           System.IO                       (hPutStrLn, stderr)
-
 --------------------------------------------------------------------------------
-
-
 -- | Workaround for https://github.com/bos/aeson/issues/287.
 o .:?? val = fmap join (o .:? val)
 
 
-data DirectoryBlockHeader = DirectoryBlockHeader {
-    topLevelKeymr :: Text
+data Ecaccountbalances = Ecaccountbalances {
+    ecaccountbalancesAck   :: Double,
+    ecaccountbalancesSaved :: Double
   } deriving (Show,Eq,GHC.Generics.Generic)
 
 
-instance FromJSON DirectoryBlockHeader where
-  parseJSON (Object v) = DirectoryBlockHeader <$> v .: "keymr"
+instance FromJSON Ecaccountbalances where
+  parseJSON (Object v) = Ecaccountbalances <$> v .: "ack" <*> v .: "saved"
   parseJSON _          = mzero
 
 
-instance ToJSON DirectoryBlockHeader where
-  toJSON (DirectoryBlockHeader {..}) = object ["keymr" .= topLevelKeymr]
-  toEncoding (DirectoryBlockHeader {..}) = pairs ("keymr" .= topLevelKeymr)
+instance ToJSON Ecaccountbalances where
+  toJSON (Ecaccountbalances {..}) =
+    object ["ack" .= ecaccountbalancesAck, "saved" .= ecaccountbalancesSaved]
+  toEncoding (Ecaccountbalances {..}) =
+    pairs ("ack" .= ecaccountbalancesAck <> "saved" .= ecaccountbalancesSaved)
+
+
+data TopLevel = TopLevel {
+    topLevelFctaccountbalances :: Ecaccountbalances,
+    topLevelEcaccountbalances  :: Ecaccountbalances
+  } deriving (Show,Eq,GHC.Generics.Generic)
+
+
+instance FromJSON TopLevel where
+  parseJSON (Object v) =
+    TopLevel <$> v .: "fctaccountbalances" <*> v .: "ecaccountbalances"
+  parseJSON _ = mzero
+
+
+instance ToJSON TopLevel where
+  toJSON (TopLevel {..}) = object
+    [ "fctaccountbalances" .= topLevelFctaccountbalances
+    , "ecaccountbalances" .= topLevelEcaccountbalances
+    ]
+  toEncoding (TopLevel {..}) = pairs
+    (  "fctaccountbalances"
+    .= topLevelFctaccountbalances
+    <> "ecaccountbalances"
+    .= topLevelEcaccountbalances
+    )

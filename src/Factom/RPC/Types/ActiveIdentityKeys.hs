@@ -5,7 +5,7 @@
 {-# LANGUAGE TemplateHaskell     #-}
 {-# LANGUAGE TypeOperators       #-}
 
-module Factom.RPC.Types.DirectoryBlockHead where
+module  Factom.RPC.Types.ActiveIdentityKeys where
 
 import           Control.Applicative
 import           Control.Monad                   (forM_, join, mzero)
@@ -21,23 +21,34 @@ import           System.Environment              (getArgs)
 import           System.Exit                     (exitFailure, exitSuccess)
 import           System.IO                       (hPutStrLn, stderr)
 
---------------------------------------------------------------------------------
-
-
 -- | Workaround for https://github.com/bos/aeson/issues/287.
 o .:?? val = fmap join (o .:? val)
 
 
-data DirectoryBlockHeader = DirectoryBlockHeader {
-    topLevelKeymr :: Text
+data TopLevel = TopLevel {
+    topLevelHeight  :: Double,
+    topLevelChainid :: Text,
+    topLevelKeys    :: [Text]
   } deriving (Show,Eq,GHC.Generics.Generic)
 
 
-instance FromJSON DirectoryBlockHeader where
-  parseJSON (Object v) = DirectoryBlockHeader <$> v .: "keymr"
-  parseJSON _          = mzero
+instance FromJSON TopLevel where
+  parseJSON (Object v) =
+    TopLevel <$> v .: "height" <*> v .: "chainid" <*> v .: "keys"
+  parseJSON _ = mzero
 
 
-instance ToJSON DirectoryBlockHeader where
-  toJSON (DirectoryBlockHeader {..}) = object ["keymr" .= topLevelKeymr]
-  toEncoding (DirectoryBlockHeader {..}) = pairs ("keymr" .= topLevelKeymr)
+instance ToJSON TopLevel where
+  toJSON (TopLevel {..}) = object
+    [ "height" .= topLevelHeight
+    , "chainid" .= topLevelChainid
+    , "keys" .= topLevelKeys
+    ]
+  toEncoding (TopLevel {..}) = pairs
+    (  "height"
+    .= topLevelHeight
+    <> "chainid"
+    .= topLevelChainid
+    <> "keys"
+    .= topLevelKeys
+    )

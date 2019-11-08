@@ -20,5 +20,4 @@ import qualified GHC.Generics
 import           System.Environment              (getArgs)
 import           System.Exit                     (exitFailure, exitSuccess)
 import           System.IO                       (hPutStrLn, stderr)
-
 --------------------------------------------------------------------------------

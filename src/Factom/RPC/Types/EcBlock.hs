@@ -8,18 +8,32 @@
 module Factom.RPC.Types.EcBlock where
 
 import           Control.Applicative
-import           Control.Monad                   (forM_, join, mzero)
-import           Data.Aeson                      (FromJSON (..), ToJSON (..),
-                                                  Value (..), decode, object,
-                                                  pairs, (.:), (.:?), (.=))
+import           Control.Monad                  ( forM_
+                                                , join
+                                                , mzero
+                                                )
+import           Data.Aeson                     ( FromJSON(..)
+                                                , ToJSON(..)
+                                                , Value(..)
+                                                , decode
+                                                , object
+                                                , pairs
+                                                , (.:)
+                                                , (.:?)
+                                                , (.=)
+                                                )
 import           Data.Aeson.AutoType.Alternative
-import qualified Data.ByteString.Lazy.Char8      as BSL
+import qualified Data.ByteString.Lazy.Char8    as BSL
 import           Data.Monoid
-import           Data.Text                       (Text)
+import           Data.Text                      ( Text )
 import qualified GHC.Generics
-import           System.Environment              (getArgs)
-import           System.Exit                     (exitFailure, exitSuccess)
-import           System.IO                       (hPutStrLn, stderr)
+import           System.Environment             ( getArgs )
+import           System.Exit                    ( exitFailure
+                                                , exitSuccess
+                                                )
+import           System.IO                      ( hPutStrLn
+                                                , stderr
+                                                )
 
 --------------------------------------------------------------------------------
 
@@ -211,7 +225,3 @@ instance ToJSON ECBlock where
     object ["rawdata" .= topLevelRawdata, "ecblock" .= topLevelEcblock]
   toEncoding (ECBlock {..}) =
     pairs ("rawdata" .= topLevelRawdata <> "ecblock" .= topLevelEcblock)
-
-
-
--- brittany --write-mode=inplace | json-autotype json-data/directory-block-head.json -o json-data/DirectoryBlockHeader.hsx
