@@ -1,7 +1,7 @@
 # Haskell Json RPC client for Factom blockchain
 
 [![Build Status](https://travis-ci.com/kompendium-llc/factom-haskell-client.svg?branch=master)](https://travis-ci.com/kompendium-llc/factom-haskell-client)
-[![Coverage Status](https://camo.githubusercontent.com/b272af7667e6a2ec5f138e10c1f4cadcff257c0d/68747470733a2f2f636f766572616c6c732e696f2f7265706f732f6775696c6c61756d652d6e617267656f742f6870632d636f766572616c6c732d74657374696e67322f62616467652e706e673f6272616e63683d6d6173746572)](https://coveralls.io/github/kompendium-llc/factom-haskell-client?branch=master)
+[![Coverage Status](https://camo.githubusercontent.com/97fc12d3a3ca2613e37adcdc75afbb7e760acc10/687474703a2f2f696d672e736869656c64732e696f2f636f766572616c6c732f74726175746f6e656e2f636f766572616c6c732d6d6176656e2d706c7567696e2f6d61737465722e737667)](https://coveralls.io/github/kompendium-llc/factom-haskell-client?branch=master)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/kompendium-llc/api-rpc-factom/blob/master/LICENSE)
 <!-- 
 [![Coverage Status](https://coveralls.io/repos/github/kompendium-llc/factom-haskell-client/badge.svg?branch=master)](https://coveralls.io/github/kompendium-llc/factom-haskell-client?branch=master)
