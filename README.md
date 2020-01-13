@@ -4,7 +4,7 @@
 [![Coverage Status](https://camo.githubusercontent.com/97fc12d3a3ca2613e37adcdc75afbb7e760acc10/687474703a2f2f696d672e736869656c64732e696f2f636f766572616c6c732f74726175746f6e656e2f636f766572616c6c732d6d6176656e2d706c7567696e2f6d61737465722e737667)](https://coveralls.io/github/kompendium-llc/factom-haskell-client?branch=master)
 ![Hackage](https://img.shields.io/hackage/v/api-rpc-factom)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/kompendium-llc/api-rpc-factom/blob/master/LICENSE)
-<!-- 
+<!--
 [![Coverage Status](https://coveralls.io/repos/github/kompendium-llc/factom-haskell-client/badge.svg?branch=master)](https://coveralls.io/github/kompendium-llc/factom-haskell-client?branch=master)
 -->
 
@@ -142,3 +142,15 @@ You can load REPL with `stack repl` and evaluate functionality with real-time fe
 ## Development
 
 To contribute to the library, clone the repository, create a feature branch and submit a PR to the `devel` branch. Once approved and tested it will be streamlined to `master` i.e upstream.
+
+## Contributions
+
+Please, feel free to contribute, fork the repo and submit PR.
+
+
+Say thanks, send a tip:
+
+- `btc`: 39oVXpsgsyW8ZgzsnX3sV7HLdtXWfT96qN
+- `fct`: FA38cwer93mmPw1HxjScLmK1yF9iJTu5P87T2vdkbuLovm2YXyss
+- `eth`: 0x9cDBA6bb44772259B3A3fb89cf233A147a720f34
+- `xlm`: GD2FROTYXYSNOQQREYXHCXVOYWV556EM6PAHMVUHJNJEUYTUXUSNUZQ3
