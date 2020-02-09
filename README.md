@@ -4,9 +4,6 @@
 [![Coverage Status](https://camo.githubusercontent.com/97fc12d3a3ca2613e37adcdc75afbb7e760acc10/687474703a2f2f696d672e736869656c64732e696f2f636f766572616c6c732f74726175746f6e656e2f636f766572616c6c732d6d6176656e2d706c7567696e2f6d61737465722e737667)](https://coveralls.io/github/kompendium-llc/factom-haskell-client?branch=master)
 ![Hackage](https://img.shields.io/hackage/v/api-rpc-factom)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/kompendium-llc/api-rpc-factom/blob/master/LICENSE)
-<!--
-[![Coverage Status](https://coveralls.io/repos/github/kompendium-llc/factom-haskell-client/badge.svg?branch=master)](https://coveralls.io/github/kompendium-llc/factom-haskell-client?branch=master)
--->
 
 
 A JSON-RPC Haskell client for the Factom protocol. Each response has special ADT(algebraic data type) that automatically converted from JSON response. Using [Remote Monad](https://ku-fpg.github.io/files/Gill-15-RemoteMonad.pdf) pattern multiple request can be batched and executed simulatenously, following more robust approach and reducing usage of expensive RPC calls.
@@ -19,7 +16,7 @@ Choosing a batching strategy. There are two strategies:
 
 You can install package from [Hackage](https://hackage.haskell.org/package/api-rpc-factom) and build with Cabal, but we recommend to use [Stack](https://haskellstack.org) tool. Add to you dependencies in stack.yaml and cabal file dependency `- api-rpc-factom`.
 
-To run and test fromrepository
+To run and test from repository
 
 1. Build with stack
 ```bash
