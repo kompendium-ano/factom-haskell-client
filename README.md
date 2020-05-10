@@ -138,6 +138,10 @@ You can load REPL with `stack repl` and evaluate functionality with real-time fe
 
 To contribute to the library, clone the repository, create a feature branch and submit a PR to the `devel` branch. Once approved and tested it will be streamlined to `master` i.e upstream.
 
+## Learn
+- [Accessing the Factom blockchain from different programming languages](https://medium.com/kompendium-developments/accessing-factom-blockchain-from-different-programming-languages-7f09030efe16)
+- [Building simple blockchain game with Factom](https://medium.com/kompendium-developments/accessing-factom-blockchain-from-different-programming-languages-7f09030efe16)
+
 ## Contributions
 
 Please, feel free to contribute, fork the repo and submit PR.
