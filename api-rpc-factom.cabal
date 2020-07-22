@@ -1,5 +1,11 @@
 cabal-version: 1.12
 
+-- This file has been generated from package.yaml by hpack version 0.33.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 9e8e30fa580d50b064c5496292798e98d97f09157d51d14d8dba2da19dcbe8e6
+
 name:           api-rpc-factom
 version:        0.1.3.2
 synopsis:       RPC API client for Factom
@@ -29,14 +35,42 @@ library
       Factom.RPC.Debug
       Factom.RPC.JsonRpc
       Factom.RPC.Types.Ack
+      Factom.RPC.Types.ActiveIdentityKeys
+      Factom.RPC.Types.AddEcOutput
+      Factom.RPC.Types.AddFee
+      Factom.RPC.Types.AddInput
+      Factom.RPC.Types.AddOutput
+      Factom.RPC.Types.Address
       Factom.RPC.Types.AdminBlock
       Factom.RPC.Types.Anchors
+      Factom.RPC.Types.Chain
+      Factom.RPC.Types.ChainHead
+      Factom.RPC.Types.CommitEntry
+      Factom.RPC.Types.CurrentMinute
+      Factom.RPC.Types.DBlock
+      Factom.RPC.Types.Diagnostics
       Factom.RPC.Types.DirectoryBlock
       Factom.RPC.Types.DirectoryBlockHead
+      Factom.RPC.Types.DirectoryBlockHeader
       Factom.RPC.Types.EcBlock
       Factom.RPC.Types.Entry
+      Factom.RPC.Types.EntryCreditBalance
+      Factom.RPC.Types.EntryCreditRate
+      Factom.RPC.Types.FactoidBalance
       Factom.RPC.Types.FactoidBlock
+      Factom.RPC.Types.FactoidSubmit
       Factom.RPC.Types.Heights
+      Factom.RPC.Types.MultipleECBalances
+      Factom.RPC.Types.MultipleEcBalances
+      Factom.RPC.Types.MultipleFctBalances
+      Factom.RPC.Types.PendingEntries
+      Factom.RPC.Types.PendingTransactions
+      Factom.RPC.Types.Properties
+      Factom.RPC.Types.Remove
+      Factom.RPC.Types.SignTransaction
+      Factom.RPC.Types.TransactionsRetrieving
+      Factom.RPC.Types.UnlockWallet
+      Factom.RPC.Types.WalletBalances
       Factom.RPC.Utils
       Paths_api_rpc_factom
   hs-source-dirs:

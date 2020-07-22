@@ -5,7 +5,7 @@ synopsis: RPC API client for Factom
 category: Web
 author: Sergey Bushnyak
 maintainer: sergey.bushnyak@sigrlami.eu
-copyright: ! 'Copyright: (c) 2019 Sergey Bushnyak'
+copyright: ! 'Copyright: (c) 2019-2020 Sergey Bushnyak'
 license: MIT
 github: kompendium-llc/api-rpc-factom
 extra-source-files:

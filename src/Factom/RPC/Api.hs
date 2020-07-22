@@ -119,15 +119,16 @@ reqDiagnostics =
 
 -- | Get information about directory block
 --
-reqDirectoryBlock :: RPC ()
-reqDirectoryBlock =
-  method "directory-block" None
+reqDirectoryBlock :: Text -> RPC DirectoryBlock
+reqDirectoryBlock keymr =
+  method "directory-block" $ List [toJSON keymr]
 
 -- | Get the most recently recorded block.
---
-reqDirectoryBlockHead :: RPC ()
+--   The directory block head is the last known directory block by factom.
+--   This can be used to grab the latest block and the information required to traverse the entire blockchain.
+reqDirectoryBlockHead :: RPC DirectoryBlockHeader
 reqDirectoryBlockHead =
-  method "directory-block-head" None
+  method "directory-block-head" $ None
 
 -- | Retrieve the entry credit block for any given height
 --
