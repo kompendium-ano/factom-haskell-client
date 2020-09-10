@@ -27,16 +27,16 @@ import           System.IO                       (hPutStrLn, stderr)
 o .:?? val = fmap join (o .:? val)
 
 
-data TopLevel = TopLevel {
+data DirectoryBlockHeader = DirectoryBlockHeader {
     topLevelKeymr :: Text
   } deriving (Show,Eq,GHC.Generics.Generic)
 
 
-instance FromJSON TopLevel where
-  parseJSON (Object v) = TopLevel <$> v .: "keymr"
+instance FromJSON DirectoryBlockHeader where
+  parseJSON (Object v) = DirectoryBlockHeader <$> v .: "keymr"
   parseJSON _          = mzero
 
 
-instance ToJSON TopLevel where
-  toJSON (TopLevel {..}) = object ["keymr" .= topLevelKeymr]
-  toEncoding (TopLevel {..}) = pairs ("keymr" .= topLevelKeymr)
+instance ToJSON DirectoryBlockHeader where
+  toJSON (DirectoryBlockHeader {..}) = object ["keymr" .= topLevelKeymr]
+  toEncoding (DirectoryBlockHeader {..}) = pairs ("keymr" .= topLevelKeymr)

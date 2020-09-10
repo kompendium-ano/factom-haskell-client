@@ -33,6 +33,8 @@ import           Network.Socket                   (HostName, ServiceName,
 import           Factom.RPC.JsonRpc               (JsonRpcT, runJsonRpcT)
 import           Factom.RPC.Types.AdminBlock
 import           Factom.RPC.Types.Heights
+import           Factom.RPC.Types.DirectoryBlockHeader
+import           Factom.RPC.Types.DirectoryBlock
 
 --------------------------------------------------------------------------------
 
