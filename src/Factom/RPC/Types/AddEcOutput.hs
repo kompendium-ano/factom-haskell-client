@@ -1,4 +1,4 @@
-gi{-# LANGUAGE DeriveGeneric       #-}
+{-# LANGUAGE DeriveGeneric       #-}
 {-# LANGUAGE OverloadedStrings   #-}
 {-# LANGUAGE RecordWildCards     #-}
 {-# LANGUAGE ScopedTypeVariables #-}
@@ -35,9 +35,10 @@ import           System.IO                      ( hPutStrLn
                                                 , stderr
                                                 )
 
+--------------------------------------------------------------------------------
+
 -- | Workaround for https://github.com/bos/aeson/issues/287.
 o .:?? val = fmap join (o .:? val)
-
 
 data OutputsElt = OutputsElt {
     outputsEltAmount  :: Double,
@@ -57,24 +58,24 @@ instance ToJSON OutputsElt where
     pairs ("amount" .= outputsEltAmount <> "address" .= outputsEltAddress)
 
 
-data TopLevel = TopLevel {
-    topLevelFeesrequired   :: Double,
-    topLevelEcoutputs      :: [OutputsElt],
-    topLevelSigned         :: Bool,
-    topLevelInputs         :: [OutputsElt],
-    topLevelOutputs        :: [OutputsElt],
-    topLevelName           :: Text,
-    topLevelTotalinputs    :: Double,
-    topLevelTotalecoutputs :: Double,
-    topLevelTimestamp      :: Double,
-    topLevelTotaloutputs   :: Double,
-    topLevelTxid           :: Text
+data Result = Result {
+    reFeesrequired   :: Double,
+    reEcoutputs      :: [OutputsElt],
+    reSigned         :: Bool,
+    reInputs         :: [OutputsElt],
+    reOutputs        :: [OutputsElt],
+    reName           :: Text,
+    reTotalinputs    :: Double,
+    reTotalecoutputs :: Double,
+    reTimestamp      :: Double,
+    reTotaloutputs   :: Double,
+    reTxid           :: Text
   } deriving (Show,Eq,GHC.Generics.Generic)
 
 
-instance FromJSON TopLevel where
+instance FromJSON Result where
   parseJSON (Object v) =
-    TopLevel
+    Result
       <$> v
       .:  "feesrequired"
       <*> v
@@ -100,41 +101,41 @@ instance FromJSON TopLevel where
   parseJSON _ = mzero
 
 
-instance ToJSON TopLevel where
-  toJSON (TopLevel {..}) = object
-    [ "feesrequired" .= topLevelFeesrequired
-    , "ecoutputs" .= topLevelEcoutputs
-    , "signed" .= topLevelSigned
-    , "inputs" .= topLevelInputs
-    , "outputs" .= topLevelOutputs
-    , "name" .= topLevelName
-    , "totalinputs" .= topLevelTotalinputs
-    , "totalecoutputs" .= topLevelTotalecoutputs
-    , "timestamp" .= topLevelTimestamp
-    , "totaloutputs" .= topLevelTotaloutputs
-    , "txid" .= topLevelTxid
+instance ToJSON Result where
+  toJSON (Result {..}) = object
+    [ "feesrequired" .= reFeesrequired
+    , "ecoutputs" .= reEcoutputs
+    , "signed" .= reSigned
+    , "inputs" .= reInputs
+    , "outputs" .= reOutputs
+    , "name" .= reName
+    , "totalinputs" .= reTotalinputs
+    , "totalecoutputs" .= reTotalecoutputs
+    , "timestamp" .= reTimestamp
+    , "totaloutputs" .= reTotaloutputs
+    , "txid" .= reTxid
     ]
-  toEncoding (TopLevel {..}) = pairs
+  toEncoding (Result {..}) = pairs
     (  "feesrequired"
-    .= topLevelFeesrequired
+    .= reFeesrequired
     <> "ecoutputs"
-    .= topLevelEcoutputs
+    .= reEcoutputs
     <> "signed"
-    .= topLevelSigned
+    .= reSigned
     <> "inputs"
-    .= topLevelInputs
+    .= reInputs
     <> "outputs"
-    .= topLevelOutputs
+    .= reOutputs
     <> "name"
-    .= topLevelName
+    .= reName
     <> "totalinputs"
-    .= topLevelTotalinputs
+    .= reTotalinputs
     <> "totalecoutputs"
-    .= topLevelTotalecoutputs
+    .= reTotalecoutputs
     <> "timestamp"
-    .= topLevelTimestamp
+    .= reTimestamp
     <> "totaloutputs"
-    .= topLevelTotaloutputs
+    .= reTotaloutputs
     <> "txid"
-    .= topLevelTxid
+    .= reTxid
     )

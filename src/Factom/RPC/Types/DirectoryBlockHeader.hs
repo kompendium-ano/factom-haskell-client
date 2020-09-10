@@ -5,7 +5,7 @@
 {-# LANGUAGE TemplateHaskell     #-}
 {-# LANGUAGE TypeOperators       #-}
 
-module  Factom.RPC.Types.JsonDataDirectoryBlockHeader where
+module  Factom.RPC.Types.DirectoryBlockHeader where
 
 import           Control.Applicative
 import           Control.Monad                   (forM_, join, mzero)
@@ -20,6 +20,8 @@ import qualified GHC.Generics
 import           System.Environment              (getArgs)
 import           System.Exit                     (exitFailure, exitSuccess)
 import           System.IO                       (hPutStrLn, stderr)
+
+--------------------------------------------------------------------------------
 
 -- | Workaround for https://github.com/bos/aeson/issues/287.
 o .:?? val = fmap join (o .:? val)
