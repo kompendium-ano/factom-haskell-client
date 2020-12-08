@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 9e8e30fa580d50b064c5496292798e98d97f09157d51d14d8dba2da19dcbe8e6
+-- hash: 03522e0bb9ae35483da6751175d445fc29da1b40b1194c4625f410abbf4353d1
 
 name:           api-rpc-factom
 version:        0.1.3.2
@@ -15,7 +15,7 @@ homepage:       https://github.com/kompendium-llc/api-rpc-factom#readme
 bug-reports:    https://github.com/kompendium-llc/api-rpc-factom/issues
 author:         Sergey Bushnyak
 maintainer:     sergey.bushnyak@sigrlami.eu
-copyright:      Copyright: (c) 2019 Sergey Bushnyak
+copyright:      Copyright: (c) 2019-2020 Sergey Bushnyak
 license:        MIT
 license-file:   LICENSE
 build-type:     Simple
