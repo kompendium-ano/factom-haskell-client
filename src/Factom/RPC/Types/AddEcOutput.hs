@@ -26,30 +26,35 @@ import           System.IO                       (hPutStrLn, stderr)
 -- | Workaround for https://github.com/bos/aeson/issues/287.
 o .:?? val = fmap join (o .:? val)
 
-data OutputsElt = OutputsElt {
-    outputsEltAmount  :: Double,
-    outputsEltAddress :: Text
+data EcOutput = EcOutput {
+    ecoAmount  :: Double,
+    ecoAddress :: Text
   } deriving (Show,Eq,GHC.Generics.Generic)
 
 
-instance FromJSON OutputsElt where
-  parseJSON (Object v) = OutputsElt <$> v .: "amount" <*> v .: "address"
+instance FromJSON EcOutput where
+  parseJSON (Object v) =
+    EcOutput <$>
+    v .: "amount" <*>
+    v .: "address"
   parseJSON _          = mzero
 
-
-instance ToJSON OutputsElt where
-  toJSON (OutputsElt {..}) =
-    object ["amount" .= outputsEltAmount, "address" .= outputsEltAddress]
-  toEncoding (OutputsElt {..}) =
-    pairs ("amount" .= outputsEltAmount <> "address" .= outputsEltAddress)
-
+instance ToJSON EcOutput where
+  toJSON (EcOutput {..}) =
+    object [ "amount"  .= ecoAmount
+           , "address" .= ecoAddress
+           ]
+  toEncoding (EcOutput {..}) =
+    pairs (   "amount"  .= ecoAmount
+           <> "address" .= ecoAddress
+          )
 
 data Result = Result {
     reFeesrequired   :: Double,
-    reEcoutputs      :: [OutputsElt],
+    reEcoutputs      :: [EcOutput],
     reSigned         :: Bool,
-    reInputs         :: [OutputsElt],
-    reOutputs        :: [OutputsElt],
+    reInputs         :: [EcOutput],
+    reOutputs        :: [EcOutput],
     reName           :: Text,
     reTotalinputs    :: Double,
     reTotalecoutputs :: Double,
@@ -57,7 +62,6 @@ data Result = Result {
     reTotaloutputs   :: Double,
     reTxid           :: Text
   } deriving (Show,Eq,GHC.Generics.Generic)
-
 
 instance FromJSON Result where
   parseJSON (Object v) =
@@ -85,7 +89,6 @@ instance FromJSON Result where
       <*> v
       .:  "txid"
   parseJSON _ = mzero
-
 
 instance ToJSON Result where
   toJSON (Result {..}) = object

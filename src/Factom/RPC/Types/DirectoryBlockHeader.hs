@@ -38,5 +38,7 @@ instance FromJSON DirectoryBlockHeader where
 
 
 instance ToJSON DirectoryBlockHeader where
-  toJSON (DirectoryBlockHeader {..}) = object ["keymr" .= topLevelKeymr]
-  toEncoding (DirectoryBlockHeader {..}) = pairs ("keymr" .= topLevelKeymr)
+  toJSON (DirectoryBlockHeader {..}) =
+    object ["keymr" .= topLevelKeymr]
+  toEncoding (DirectoryBlockHeader {..}) =
+    pairs ("keymr" .= topLevelKeymr)
