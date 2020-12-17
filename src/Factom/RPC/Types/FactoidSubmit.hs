@@ -21,23 +21,24 @@ import           System.Environment              (getArgs)
 import           System.Exit                     (exitFailure, exitSuccess)
 import           System.IO                       (hPutStrLn, stderr)
 
+--------------------------------------------------------------------------------
+
 -- | Workaround for https://github.com/bos/aeson/issues/287.
 o .:?? val = fmap join (o .:? val)
 
-
-data TopLevel = TopLevel {
-    topLevelMessage :: Text,
-    topLevelTxid    :: Text
+data FactoidSubmit = FactoidSubmit {
+    fsMessage :: Text,
+    fsTxid    :: Text
   } deriving (Show,Eq,GHC.Generics.Generic)
 
 
-instance FromJSON TopLevel where
-  parseJSON (Object v) = TopLevel <$> v .: "message" <*> v .: "txid"
+instance FromJSON FactoidSubmit where
+  parseJSON (Object v) = FactoidSubmit <$> v .: "message" <*> v .: "txid"
   parseJSON _          = mzero
 
 
-instance ToJSON TopLevel where
-  toJSON (TopLevel {..}) =
-    object ["message" .= topLevelMessage, "txid" .= topLevelTxid]
-  toEncoding (TopLevel {..}) =
-    pairs ("message" .= topLevelMessage <> "txid" .= topLevelTxid)
+instance ToJSON FactoidSubmit where
+  toJSON (FactoidSubmit {..}) =
+    object ["message" .= fsMessage, "txid" .= fsTxid]
+  toEncoding (FactoidSubmit {..}) =
+    pairs ("message" .= fsMessage <> "txid" .= fsTxid)
