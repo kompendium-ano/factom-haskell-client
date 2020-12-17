@@ -21,20 +21,21 @@ import           System.Environment              (getArgs)
 import           System.Exit                     (exitFailure, exitSuccess)
 import           System.IO                       (hPutStrLn, stderr)
 
+--------------------------------------------------------------------------------
+
 -- | Workaround for https://github.com/bos/aeson/issues/287.
 o .:?? val = fmap join (o .:? val)
 
-
-data TopLevel = TopLevel {
-    topLevelBalance :: Double
+data EntryCreditBalance = EntryCreditBalance {
+    ecbBalance :: Double
   } deriving (Show,Eq,GHC.Generics.Generic)
 
-
-instance FromJSON TopLevel where
-  parseJSON (Object v) = TopLevel <$> v .: "balance"
+instance FromJSON EntryCreditBalance where
+  parseJSON (Object v) = EntryCreditBalance <$> v .: "balance"
   parseJSON _          = mzero
 
-
-instance ToJSON TopLevel where
-  toJSON (TopLevel {..}) = object ["balance" .= topLevelBalance]
-  toEncoding (TopLevel {..}) = pairs ("balance" .= topLevelBalance)
+instance ToJSON EntryCreditBalance where
+  toJSON (EntryCreditBalance {..}) =
+    object ["balance" .= ecbBalance]
+  toEncoding (EntryCreditBalance {..}) =
+    pairs ("balance" .= ecbBalance)
