@@ -20,7 +20,9 @@ import qualified GHC.Generics
 import           System.Environment              (getArgs)
 import           System.Exit                     (exitFailure, exitSuccess)
 import           System.IO                       (hPutStrLn, stderr)
+
 --------------------------------------------------------------------------------
+
 -- | Workaround for https://github.com/bos/aeson/issues/287.
 o .:?? val = fmap join (o .:? val)
 
@@ -54,16 +56,15 @@ instance ToJSON BalancesElt where
     )
 
 
-data TopLevel = TopLevel {
-    topLevelBalances        :: [BalancesElt],
-    topLevelLastsavedheight :: Double,
-    topLevelCurrentheight   :: Double
+data MultipleFCTBalances = MultipleFCTBalances {
+    mfbBalances        :: [BalancesElt],
+    mfbLastsavedheight :: Double,
+    mfbCurrentheight   :: Double
   } deriving (Show,Eq,GHC.Generics.Generic)
 
-
-instance FromJSON TopLevel where
+instance FromJSON MultipleFCTBalances where
   parseJSON (Object v) =
-    TopLevel
+    MultipleFCTBalances
       <$> v
       .:  "balances"
       <*> v
@@ -72,18 +73,17 @@ instance FromJSON TopLevel where
       .:  "currentheight"
   parseJSON _ = mzero
 
-
-instance ToJSON TopLevel where
-  toJSON (TopLevel {..}) = object
-    [ "balances" .= topLevelBalances
-    , "lastsavedheight" .= topLevelLastsavedheight
-    , "currentheight" .= topLevelCurrentheight
+instance ToJSON MultipleFCTBalances where
+  toJSON (MultipleFCTBalances {..}) = object
+    [ "balances"        .= mfbBalances
+    , "lastsavedheight" .= mfbLastsavedheight
+    , "currentheight"   .= mfbCurrentheight
     ]
-  toEncoding (TopLevel {..}) = pairs
+  toEncoding (MultipleFCTBalances {..}) = pairs
     (  "balances"
-    .= topLevelBalances
+    .= mfbBalances
     <> "lastsavedheight"
-    .= topLevelLastsavedheight
+    .= mfbLastsavedheight
     <> "currentheight"
-    .= topLevelCurrentheight
+    .= mfbCurrentheight
     )
