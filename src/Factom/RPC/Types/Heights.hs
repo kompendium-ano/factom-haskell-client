@@ -8,32 +8,18 @@
 module Factom.RPC.Types.Heights where
 
 import           Control.Applicative
-import           Control.Monad                  ( forM_
-                                                , join
-                                                , mzero
-                                                )
-import           Data.Aeson                     ( FromJSON(..)
-                                                , ToJSON(..)
-                                                , Value(..)
-                                                , decode
-                                                , object
-                                                , pairs
-                                                , (.:)
-                                                , (.:?)
-                                                , (.=)
-                                                )
+import           Control.Monad                   (forM_, join, mzero)
+import           Data.Aeson                      (FromJSON (..), ToJSON (..),
+                                                  Value (..), decode, object,
+                                                  pairs, (.:), (.:?), (.=))
 import           Data.Aeson.AutoType.Alternative
-import qualified Data.ByteString.Lazy.Char8    as BSL
+import qualified Data.ByteString.Lazy.Char8      as BSL
 import           Data.Monoid
-import           Data.Text                      ( Text )
+import           Data.Text                       (Text)
 import qualified GHC.Generics
-import           System.Environment             ( getArgs )
-import           System.Exit                    ( exitFailure
-                                                , exitSuccess
-                                                )
-import           System.IO                      ( hPutStrLn
-                                                , stderr
-                                                )
+import           System.Environment              (getArgs)
+import           System.Exit                     (exitFailure, exitSuccess)
+import           System.IO                       (hPutStrLn, stderr)
 
 --------------------------------------------------------------------------------
 
@@ -42,12 +28,11 @@ o .:?? val = fmap join (o .:? val)
 
 data Heights =
   Heights
-    { hLeaderheight         :: Double
-    , hDirectoryblockheight :: Double
-    , hEntryblockheight     :: Double
-    , hEntryheight          :: Double
+    { hLeaderHeight         :: Double
+    , hDirectoryBlockHeight :: Double
+    , hEntryBlockHeight     :: Double
+    , hEntryHeight          :: Double
     } deriving (Show, Eq, GHC.Generics.Generic)
-
 
 instance FromJSON Heights where
   parseJSON (Object v) =
@@ -64,18 +49,18 @@ instance FromJSON Heights where
 
 instance ToJSON Heights where
   toJSON (Heights {..}) = object
-    [ "leaderheight" .= hLeaderheight
-    , "directoryblockheight" .= hDirectoryblockheight
-    , "entryblockheight" .= hEntryblockheight
-    , "entryheight" .= hEntryheight
+    [ "leaderheight"         .= hLeaderHeight
+    , "directoryblockheight" .= hDirectoryBlockHeight
+    , "entryblockheight"     .= hEntryBlockHeight
+    , "entryheight"          .= hEntryHeight
     ]
   toEncoding (Heights {..}) = pairs
     (  "leaderheight"
-    .= hLeaderheight
+    .= hLeaderHeight
     <> "directoryblockheight"
-    .= hDirectoryblockheight
+    .= hDirectoryBlockHeight
     <> "entryblockheight"
-    .= hEntryblockheight
+    .= hEntryBlockHeight
     <> "entryheight"
-    .= hEntryheight
+    .= hEntryHeight
     )

@@ -11,10 +11,12 @@
 
 module Factom.RPC.Api
     ( runTCPClient
+    , reqHeights
+    , reqCurrentMinute
     ) where
 
 import           Control.Concurrent
-import           Control.Exception                (bracket)
+import           Control.Exception                     (bracket)
 import           Control.Monad.IO.Class
 import           Control.Remote.Monad.JSON
 import           Control.Remote.Monad.JSON.Client
@@ -23,24 +25,24 @@ import           Control.Remote.Monad.JSON.Trace
 import           Data.Aeson
 import           Data.Aeson.Types
 import           Data.Text
-import           Network.Socket                   (HostName, ServiceName,
-                                                   SocketType (Stream),
-                                                   addrAddress, addrFamily,
-                                                   addrProtocol, addrSocketType,
-                                                   close, connect, defaultHints,
-                                                   getAddrInfo, socket)
+import           Network.Socket                        (HostName, ServiceName,
+                                                        SocketType (Stream),
+                                                        addrAddress, addrFamily,
+                                                        addrProtocol,
+                                                        addrSocketType, close,
+                                                        connect, defaultHints,
+                                                        getAddrInfo, socket)
 
-import           Factom.RPC.JsonRpc               (JsonRpcT, runJsonRpcT)
+import           Factom.RPC.JsonRpc                    (JsonRpcT, runJsonRpcT)
 import           Factom.RPC.Types.AdminBlock
-import           Factom.RPC.Types.Heights
-import           Factom.RPC.Types.DirectoryBlockHeader
 import           Factom.RPC.Types.DirectoryBlock
+import           Factom.RPC.Types.DirectoryBlockHeader
+import           Factom.RPC.Types.Heights
 
 --------------------------------------------------------------------------------
 
-endpoint  = "http://192.168.0.182:8088/v2"
+endpoint       = "http://51.158.171.20:8088/v2"
 endpointRemote = "https://api.factomd.net/v2" -- "http://dev.factomd.net/v2"
-
 
 runTCPClient :: HostName -> ServiceName -> JsonRpcT IO a -> IO a
 runTCPClient host port f = do
@@ -216,7 +218,7 @@ reqHeights =
 --------------------------------------------------------------------------------
 
 main = do
-  let s = weakSession (traceSendAPI "" $ clientSendAPI endpoint)
+  let s = weakSession (traceSendAPI "" $ clientSendAPI endpointRemote)
   h <- send s $ do
          h <- reqHeights --ablockByHeight 1000
          return h
