@@ -18,6 +18,7 @@ library:
   - Factom.RPC.Api
   - Factom.RPC.Wallet.Api
   - Factom.RPC.Types
+  - Factom.RPC.Types.DirectoryBlock
   dependencies:
   - base >=4.7 && <5
   - aeson
