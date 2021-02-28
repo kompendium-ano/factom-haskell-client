@@ -4,10 +4,10 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 8704fb688f7bf09a01310d76b5bc5e7d893b1c51afd0ff94f74ec5921036d2a4
+-- hash: 605b5fb8697923fd3b0f5fc2a43537b5a986db246f7af90894cc560ea0d60c11
 
 name:           api-rpc-factom
-version:        0.1.3.5
+version:        0.1.4.0
 synopsis:       simple json-rpc API client for Factom
 description:    simple json-rpc API client for Factom blockchain
 category:       Web
@@ -15,7 +15,7 @@ homepage:       https://github.com/kompendium-ano/factom-haskell-client#readme
 bug-reports:    https://github.com/kompendium-ano/factom-haskell-client/issues
 author:         Sergey Bushnyak
 maintainer:     sergey.bushnyak@sigrlami.eu
-copyright:      Copyright: (c) 2019-2020 Sergey Bushnyak, Kompendium, LLC
+copyright:      Copyright: (c) 2019-2021 Sergey Bushnyak, Kompendium, LLC
 license:        MIT
 license-file:   LICENSE
 build-type:     Simple
@@ -32,6 +32,7 @@ library
       Factom.RPC.Wallet.Api
       Factom.RPC.Types
       Factom.RPC.Types.DirectoryBlock
+      Factom.RPC.Types.Heights
   other-modules:
       Factom.RPC.Debug
       Factom.RPC.JsonRpc
@@ -59,7 +60,6 @@ library
       Factom.RPC.Types.FactoidBalance
       Factom.RPC.Types.FactoidBlock
       Factom.RPC.Types.FactoidSubmit
-      Factom.RPC.Types.Heights
       Factom.RPC.Types.MultipleECBalances
       Factom.RPC.Types.MultipleEcBalances
       Factom.RPC.Types.MultipleFctBalances

@@ -1,11 +1,11 @@
 name: api-rpc-factom
-version: '0.1.3.5'
+version: '0.1.4.0'
 description: simple json-rpc API client for Factom blockchain
 synopsis: simple json-rpc API client for Factom
 category: Web
 author: Sergey Bushnyak
 maintainer: sergey.bushnyak@sigrlami.eu
-copyright: ! 'Copyright: (c) 2019-2020 Sergey Bushnyak, Kompendium, LLC'
+copyright: ! 'Copyright: (c) 2019-2021 Sergey Bushnyak, Kompendium, LLC'
 license: MIT
 github: kompendium-ano/factom-haskell-client
 extra-source-files:
