@@ -22,45 +22,38 @@ import           System.Exit                     (exitFailure, exitSuccess)
 import           System.IO                       (hPutStrLn, stderr)
 
 --------------------------------------------------------------------------------
-
 -- | Workaround for https://github.com/bos/aeson/issues/287.
 o .:?? val = fmap join (o .:? val)
 
 data Heights =
   Heights
-    { hLeaderHeight         :: Double
-    , hDirectoryBlockHeight :: Double
-    , hEntryBlockHeight     :: Double
-    , hEntryHeight          :: Double
-    } deriving (Show, Eq, GHC.Generics.Generic)
+    { hLeaderHeight         :: Int
+    , hDirectoryBlockHeight :: Int
+    , hEntryBlockHeight     :: Int
+    , hEntryHeight          :: Int
+    }
+  deriving (Show, Eq, GHC.Generics.Generic)
 
 instance FromJSON Heights where
   parseJSON (Object v) =
-    Heights
-      <$> v
-      .:  "leaderheight"
-      <*> v
-      .:  "directoryblockheight"
-      <*> v
-      .:  "entryblockheight"
-      <*> v
-      .:  "entryheight"
+    Heights <$> v .: "leaderheight" <*> v .: "directoryblockheight" <*>
+    v .: "entryblockheight" <*>
+    v .: "entryheight"
   parseJSON _ = mzero
 
 instance ToJSON Heights where
-  toJSON (Heights {..}) = object
-    [ "leaderheight"         .= hLeaderHeight
-    , "directoryblockheight" .= hDirectoryBlockHeight
-    , "entryblockheight"     .= hEntryBlockHeight
-    , "entryheight"          .= hEntryHeight
-    ]
-  toEncoding (Heights {..}) = pairs
-    (  "leaderheight"
-    .= hLeaderHeight
-    <> "directoryblockheight"
-    .= hDirectoryBlockHeight
-    <> "entryblockheight"
-    .= hEntryBlockHeight
-    <> "entryheight"
-    .= hEntryHeight
-    )
+  toJSON (Heights {..}) =
+    object
+      [ "leaderheight" .= hLeaderHeight
+      , "directoryblockheight" .= hDirectoryBlockHeight
+      , "entryblockheight" .= hEntryBlockHeight
+      , "entryheight" .= hEntryHeight
+      ]
+  toEncoding (Heights {..}) =
+    pairs
+      ("leaderheight" .= hLeaderHeight <> "directoryblockheight" .=
+       hDirectoryBlockHeight <>
+       "entryblockheight" .=
+       hEntryBlockHeight <>
+       "entryheight" .=
+       hEntryHeight)

@@ -31,123 +31,95 @@ import           Network.Socket                   (HostName, ServiceName,
 import           Factom.RPC.JsonRpc               (JsonRpcT, runJsonRpcT)
 
 --------------------------------------------------------------------------------
+endpoint = "http://localhost:8088/debug"
 
-endpoint  = "http://localhost:8088/debug"
 endpointRemote = "http://dev.factomd.net/v2/debug"
 
 -- |
 --
 reqHoldingQueue :: RPC ()
-reqHoldingQueue =
-  method "holding-queue" None
+reqHoldingQueue = method "holding-queue" None
 
 -- |
 --
 -- network-info
 reqNetworkInfo :: RPC ()
-reqNetworkInfo =
-  method "network-info" None
-
+reqNetworkInfo = method "network-info" None
 
 -- |
 --
 -- predictive-fer
 reqPredictiveFer :: RPC ()
-reqPredictiveFer =
-  method "predictive-fer" None
-
+reqPredictiveFer = method "predictive-fer" None
 
 -- |
 --
 -- audit-servers
 reqAuditServers :: RPC ()
-reqAuditServers =
-  method "audit-servers" None
-
+reqAuditServers = method "audit-servers" None
 
 -- |
 --
 -- federated-servers
 reqFederatedServers :: RPC ()
-reqFederatedServers =
-  method "federated-servers" None
-
+reqFederatedServers = method "federated-servers" None
 
 -- |
 --
 -- configuration
 reqConfiguration :: RPC ()
-reqConfiguration =
-  method "configuration" None
-
+reqConfiguration = method "configuration" None
 
 -- |
 --
 -- process-list
 reqProcessList :: RPC ()
-reqProcessList =
-  method "process-list" None
-
+reqProcessList = method "process-list" None
 
 -- |
 --
 -- authorities
 reqAuthorities :: RPC ()
-reqAuthorities =
-  method "authorities" None
-
+reqAuthorities = method "authorities" None
 
 -- |
 --
 -- reload-configuration
 reqReloadConfiguration :: RPC ()
-reqReloadConfiguration =
-  method "reload-configuration" None
-
+reqReloadConfiguration = method "reload-configuration" None
 
 -- |
 --
 -- drop-rate
 reqDropRate :: RPC ()
-reqDropRate =
-  method "drop-rate" None
-
+reqDropRate = method "drop-rate" None
 
 -- |
 --
 -- set-drop-rate
 reqSetDropRate :: RPC ()
-reqSetDropRate =
-  method "set-drop-rate" None
-
+reqSetDropRate = method "set-drop-rate" None
 
 -- |
 --
 -- delay
 reqDelay :: RPC ()
-reqDelay =
-  method "delay" None
-
+reqDelay = method "delay" None
 
 -- |
 --
 -- set-delay
 reqSetDelay :: RPC ()
-reqSetDelay =
-  method "set-delay" None
-
+reqSetDelay = method "set-delay" None
 
 -- |
 --
 -- summary
 reqSummary :: RPC ()
-reqSummary =
-  method "summary" None
-
+reqSummary = method "summary" None
 
 -- |
 --
 -- messages
 reqMessages :: RPC ()
-reqMessages =
-  method "messages" None
+reqMessages = method "messages" None

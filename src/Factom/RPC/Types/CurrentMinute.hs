@@ -5,7 +5,7 @@
 {-# LANGUAGE TemplateHaskell     #-}
 {-# LANGUAGE TypeOperators       #-}
 
-module  Factom.RPC.Types.CurrentMinute where
+module Factom.RPC.Types.CurrentMinute where
 
 import           Control.Applicative
 import           Control.Monad                   (forM_, join, mzero)
@@ -21,82 +21,68 @@ import           System.Environment              (getArgs)
 import           System.Exit                     (exitFailure, exitSuccess)
 import           System.IO                       (hPutStrLn, stderr)
 
+--------------------------------------------------------------------------------
 -- | Workaround for https://github.com/bos/aeson/issues/287.
 o .:?? val = fmap join (o .:? val)
 
+data CurrentMinute =
+  CurrentMinute
+    { cmCurrentTime             :: Double
+    , cmLeaderHeight            :: Double
+    , cmDirectoryBlockHeight    :: Double
+    , cmStallDetected           :: Bool
+    , cmFaultTimeout            :: Double
+    , cmDirectoryBlockInSeconds :: Double
+    , cmCurrentMinuteStartTime  :: Double
+    , cmCurrentBlockStartTime   :: Double
+    , cmMinute                  :: Double
+    , cmRoundTimeout            :: Double
+    }
+  deriving (Show, Eq, GHC.Generics.Generic)
 
-data TopLevel = TopLevel {
-    topLevelCurrenttime             :: Double,
-    topLevelLeaderheight            :: Double,
-    topLevelDirectoryblockheight    :: Double,
-    topLevelStalldetected           :: Bool,
-    topLevelFaulttimeout            :: Double,
-    topLevelDirectoryblockinseconds :: Double,
-    topLevelCurrentminutestarttime  :: Double,
-    topLevelCurrentblockstarttime   :: Double,
-    topLevelMinute                  :: Double,
-    topLevelRoundtimeout            :: Double
-  } deriving (Show,Eq,GHC.Generics.Generic)
-
-
-instance FromJSON TopLevel where
+instance FromJSON CurrentMinute where
   parseJSON (Object v) =
-    TopLevel
-      <$> v
-      .:  "currenttime"
-      <*> v
-      .:  "leaderheight"
-      <*> v
-      .:  "directoryblockheight"
-      <*> v
-      .:  "stalldetected"
-      <*> v
-      .:  "faulttimeout"
-      <*> v
-      .:  "directoryblockinseconds"
-      <*> v
-      .:  "currentminutestarttime"
-      <*> v
-      .:  "currentblockstarttime"
-      <*> v
-      .:  "minute"
-      <*> v
-      .:  "roundtimeout"
+    CurrentMinute <$> v .: "currenttime" <*> v .: "leaderheight" <*>
+    v .: "directoryblockheight" <*>
+    v .: "stalldetected" <*>
+    v .: "faulttimeout" <*>
+    v .: "directoryblockinseconds" <*>
+    v .: "currentminutestarttime" <*>
+    v .: "currentblockstarttime" <*>
+    v .: "minute" <*>
+    v .: "roundtimeout"
   parseJSON _ = mzero
 
-
-instance ToJSON TopLevel where
-  toJSON (TopLevel {..}) = object
-    [ "currenttime" .= topLevelCurrenttime
-    , "leaderheight" .= topLevelLeaderheight
-    , "directoryblockheight" .= topLevelDirectoryblockheight
-    , "stalldetected" .= topLevelStalldetected
-    , "faulttimeout" .= topLevelFaulttimeout
-    , "directoryblockinseconds" .= topLevelDirectoryblockinseconds
-    , "currentminutestarttime" .= topLevelCurrentminutestarttime
-    , "currentblockstarttime" .= topLevelCurrentblockstarttime
-    , "minute" .= topLevelMinute
-    , "roundtimeout" .= topLevelRoundtimeout
-    ]
-  toEncoding (TopLevel {..}) = pairs
-    (  "currenttime"
-    .= topLevelCurrenttime
-    <> "leaderheight"
-    .= topLevelLeaderheight
-    <> "directoryblockheight"
-    .= topLevelDirectoryblockheight
-    <> "stalldetected"
-    .= topLevelStalldetected
-    <> "faulttimeout"
-    .= topLevelFaulttimeout
-    <> "directoryblockinseconds"
-    .= topLevelDirectoryblockinseconds
-    <> "currentminutestarttime"
-    .= topLevelCurrentminutestarttime
-    <> "currentblockstarttime"
-    .= topLevelCurrentblockstarttime
-    <> "minute"
-    .= topLevelMinute
-    <> "roundtimeout"
-    .= topLevelRoundtimeout
-    )
+instance ToJSON CurrentMinute where
+  toJSON (CurrentMinute {..}) =
+    object
+      [ "currenttime" .= cmCurrentTime
+      , "leaderheight" .= cmLeaderHeight
+      , "directoryblockheight" .= cmDirectoryBlockHeight
+      , "stalldetected" .= cmStallDetected
+      , "faulttimeout" .= cmFaultTimeout
+      , "directoryblockinseconds" .= cmDirectoryBlockInSeconds
+      , "currentminutestarttime" .= cmCurrentMinuteStartTime
+      , "currentblockstarttime" .= cmCurrentBlockStartTime
+      , "minute" .= cmMinute
+      , "roundtimeout" .= cmRoundTimeout
+      ]
+  toEncoding (CurrentMinute {..}) =
+    pairs
+      ("currenttime" .= cmCurrentTime <> "leaderheight" .= cmLeaderHeight <>
+       "directoryblockheight" .=
+       cmDirectoryBlockHeight <>
+       "stalldetected" .=
+       cmStallDetected <>
+       "faulttimeout" .=
+       cmFaultTimeout <>
+       "directoryblockinseconds" .=
+       cmDirectoryBlockInSeconds <>
+       "currentminutestarttime" .=
+       cmCurrentMinuteStartTime <>
+       "currentblockstarttime" .=
+       cmCurrentBlockStartTime <>
+       "minute" .=
+       cmMinute <>
+       "roundtimeout" .=
+       cmRoundTimeout)

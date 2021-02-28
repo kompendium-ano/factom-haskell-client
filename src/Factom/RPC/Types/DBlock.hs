@@ -5,7 +5,7 @@
 {-# LANGUAGE TemplateHaskell     #-}
 {-# LANGUAGE TypeOperators       #-}
 
-module  Factom.RPC.Types.DBlock where
+module Factom.RPC.Types.DBlock where
 
 import           Control.Applicative
 import           Control.Monad                   (forM_, join, mzero)
@@ -21,20 +21,20 @@ import           System.Environment              (getArgs)
 import           System.Exit                     (exitFailure, exitSuccess)
 import           System.IO                       (hPutStrLn, stderr)
 
+--------------------------------------------------------------------------------
 -- | Workaround for https://github.com/bos/aeson/issues/287.
 o .:?? val = fmap join (o .:? val)
 
-
-data DbentriesElt = DbentriesElt {
-    dbentriesEltChainid :: Text,
-    dbentriesEltKeymr   :: Text
-  } deriving (Show,Eq,GHC.Generics.Generic)
-
+data DbentriesElt =
+  DbentriesElt
+    { dbentriesEltChainid :: Text
+    , dbentriesEltKeymr   :: Text
+    }
+  deriving (Show, Eq, GHC.Generics.Generic)
 
 instance FromJSON DbentriesElt where
   parseJSON (Object v) = DbentriesElt <$> v .: "chainid" <*> v .: "keymr"
   parseJSON _          = mzero
-
 
 instance ToJSON DbentriesElt where
   toJSON (DbentriesElt {..}) =
@@ -42,129 +42,102 @@ instance ToJSON DbentriesElt where
   toEncoding (DbentriesElt {..}) =
     pairs ("chainid" .= dbentriesEltChainid <> "keymr" .= dbentriesEltKeymr)
 
-
-data Header = Header {
-    headerBodymr       :: Text,
-    headerPrevfullhash :: Text,
-    headerChainid      :: Text,
-    headerNetworkid    :: Double,
-    headerDbheight     :: Double,
-    headerVersion      :: Double,
-    headerBlockcount   :: Double,
-    headerTimestamp    :: Double,
-    headerPrevkeymr    :: Text
-  } deriving (Show,Eq,GHC.Generics.Generic)
-
+data Header =
+  Header
+    { headerBodymr       :: Text
+    , headerPrevfullhash :: Text
+    , headerChainid      :: Text
+    , headerNetworkid    :: Double
+    , headerDbheight     :: Double
+    , headerVersion      :: Double
+    , headerBlockcount   :: Double
+    , headerTimestamp    :: Double
+    , headerPrevkeymr    :: Text
+    }
+  deriving (Show, Eq, GHC.Generics.Generic)
 
 instance FromJSON Header where
   parseJSON (Object v) =
-    Header
-      <$> v
-      .:  "bodymr"
-      <*> v
-      .:  "prevfullhash"
-      <*> v
-      .:  "chainid"
-      <*> v
-      .:  "networkid"
-      <*> v
-      .:  "dbheight"
-      <*> v
-      .:  "version"
-      <*> v
-      .:  "blockcount"
-      <*> v
-      .:  "timestamp"
-      <*> v
-      .:  "prevkeymr"
+    Header <$> v .: "bodymr" <*> v .: "prevfullhash" <*> v .: "chainid" <*>
+    v .: "networkid" <*>
+    v .: "dbheight" <*>
+    v .: "version" <*>
+    v .: "blockcount" <*>
+    v .: "timestamp" <*>
+    v .: "prevkeymr"
   parseJSON _ = mzero
 
-
 instance ToJSON Header where
-  toJSON (Header {..}) = object
-    [ "bodymr" .= headerBodymr
-    , "prevfullhash" .= headerPrevfullhash
-    , "chainid" .= headerChainid
-    , "networkid" .= headerNetworkid
-    , "dbheight" .= headerDbheight
-    , "version" .= headerVersion
-    , "blockcount" .= headerBlockcount
-    , "timestamp" .= headerTimestamp
-    , "prevkeymr" .= headerPrevkeymr
-    ]
-  toEncoding (Header {..}) = pairs
-    (  "bodymr"
-    .= headerBodymr
-    <> "prevfullhash"
-    .= headerPrevfullhash
-    <> "chainid"
-    .= headerChainid
-    <> "networkid"
-    .= headerNetworkid
-    <> "dbheight"
-    .= headerDbheight
-    <> "version"
-    .= headerVersion
-    <> "blockcount"
-    .= headerBlockcount
-    <> "timestamp"
-    .= headerTimestamp
-    <> "prevkeymr"
-    .= headerPrevkeymr
-    )
+  toJSON (Header {..}) =
+    object
+      [ "bodymr" .= headerBodymr
+      , "prevfullhash" .= headerPrevfullhash
+      , "chainid" .= headerChainid
+      , "networkid" .= headerNetworkid
+      , "dbheight" .= headerDbheight
+      , "version" .= headerVersion
+      , "blockcount" .= headerBlockcount
+      , "timestamp" .= headerTimestamp
+      , "prevkeymr" .= headerPrevkeymr
+      ]
+  toEncoding (Header {..}) =
+    pairs
+      ("bodymr" .= headerBodymr <> "prevfullhash" .= headerPrevfullhash <>
+       "chainid" .=
+       headerChainid <>
+       "networkid" .=
+       headerNetworkid <>
+       "dbheight" .=
+       headerDbheight <>
+       "version" .=
+       headerVersion <>
+       "blockcount" .=
+       headerBlockcount <>
+       "timestamp" .=
+       headerTimestamp <>
+       "prevkeymr" .=
+       headerPrevkeymr)
 
-
-data Dblock = Dblock {
-    dblockDbhash    :: Text,
-    dblockDbentries :: [DbentriesElt],
-    dblockHeader    :: Header,
-    dblockKeymr     :: Text
-  } deriving (Show,Eq,GHC.Generics.Generic)
-
+data Dblock =
+  Dblock
+    { dblockDbhash    :: Text
+    , dblockDbentries :: [DbentriesElt]
+    , dblockHeader    :: Header
+    , dblockKeymr     :: Text
+    }
+  deriving (Show, Eq, GHC.Generics.Generic)
 
 instance FromJSON Dblock where
   parseJSON (Object v) =
-    Dblock
-      <$> v
-      .:  "dbhash"
-      <*> v
-      .:  "dbentries"
-      <*> v
-      .:  "header"
-      <*> v
-      .:  "keymr"
+    Dblock <$> v .: "dbhash" <*> v .: "dbentries" <*> v .: "header" <*>
+    v .: "keymr"
   parseJSON _ = mzero
 
-
 instance ToJSON Dblock where
-  toJSON (Dblock {..}) = object
-    [ "dbhash" .= dblockDbhash
-    , "dbentries" .= dblockDbentries
-    , "header" .= dblockHeader
-    , "keymr" .= dblockKeymr
-    ]
-  toEncoding (Dblock {..}) = pairs
-    (  "dbhash"
-    .= dblockDbhash
-    <> "dbentries"
-    .= dblockDbentries
-    <> "header"
-    .= dblockHeader
-    <> "keymr"
-    .= dblockKeymr
-    )
+  toJSON (Dblock {..}) =
+    object
+      [ "dbhash" .= dblockDbhash
+      , "dbentries" .= dblockDbentries
+      , "header" .= dblockHeader
+      , "keymr" .= dblockKeymr
+      ]
+  toEncoding (Dblock {..}) =
+    pairs
+      ("dbhash" .= dblockDbhash <> "dbentries" .= dblockDbentries <> "header" .=
+       dblockHeader <>
+       "keymr" .=
+       dblockKeymr)
 
-
-data TopLevel = TopLevel {
-    topLevelRawdata :: Text,
-    topLevelDblock  :: Dblock
-  } deriving (Show,Eq,GHC.Generics.Generic)
-
+data TopLevel =
+  TopLevel
+    { topLevelRawdata :: Text
+    , topLevelDblock  :: Dblock
+    }
+  deriving (Show, Eq, GHC.Generics.Generic)
 
 instance FromJSON TopLevel where
   parseJSON (Object v) = TopLevel <$> v .: "rawdata" <*> v .: "dblock"
   parseJSON _          = mzero
-
 
 instance ToJSON TopLevel where
   toJSON (TopLevel {..}) =

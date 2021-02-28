@@ -5,7 +5,7 @@
 {-# LANGUAGE TemplateHaskell     #-}
 {-# LANGUAGE TypeOperators       #-}
 
-module  Factom.RPC.Types.UnlockWallet where
+module Factom.RPC.Types.UnlockWallet where
 
 import           Control.Applicative
 import           Control.Monad                   (forM_, join, mzero)
@@ -20,24 +20,26 @@ import qualified GHC.Generics
 import           System.Environment              (getArgs)
 import           System.Exit                     (exitFailure, exitSuccess)
 import           System.IO                       (hPutStrLn, stderr)
+
 --------------------------------------------------------------------------------
 -- | Workaround for https://github.com/bos/aeson/issues/287.
 o .:?? val = fmap join (o .:? val)
 
-
-data TopLevel = TopLevel {
-    topLevelSuccess       :: Bool,
-    topLevelUnlockeduntil :: Double
-  } deriving (Show,Eq,GHC.Generics.Generic)
-
+data TopLevel =
+  TopLevel
+    { topLevelSuccess       :: Bool
+    , topLevelUnlockeduntil :: Double
+    }
+  deriving (Show, Eq, GHC.Generics.Generic)
 
 instance FromJSON TopLevel where
   parseJSON (Object v) = TopLevel <$> v .: "success" <*> v .: "unlockeduntil"
   parseJSON _          = mzero
 
-
 instance ToJSON TopLevel where
-  toJSON (TopLevel {..}) = object
-    ["success" .= topLevelSuccess, "unlockeduntil" .= topLevelUnlockeduntil]
-  toEncoding (TopLevel {..}) = pairs
-    ("success" .= topLevelSuccess <> "unlockeduntil" .= topLevelUnlockeduntil)
+  toJSON (TopLevel {..}) =
+    object
+      ["success" .= topLevelSuccess, "unlockeduntil" .= topLevelUnlockeduntil]
+  toEncoding (TopLevel {..}) =
+    pairs
+      ("success" .= topLevelSuccess <> "unlockeduntil" .= topLevelUnlockeduntil)

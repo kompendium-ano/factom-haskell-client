@@ -5,7 +5,7 @@
 {-# LANGUAGE TemplateHaskell     #-}
 {-# LANGUAGE TypeOperators       #-}
 
-module  Factom.RPC.Types.Address where
+module Factom.RPC.Types.Address where
 
 import           Control.Applicative
 import           Control.Monad                   (forM_, join, mzero)
@@ -21,23 +21,23 @@ import           System.Environment              (getArgs)
 import           System.Exit                     (exitFailure, exitSuccess)
 import           System.IO                       (hPutStrLn, stderr)
 
+--------------------------------------------------------------------------------
 -- | Workaround for https://github.com/bos/aeson/issues/287.
 o .:?? val = fmap join (o .:? val)
 
+data Address =
+  Address
+    { addressSecret :: Text
+    , addressPublic :: Text
+    }
+  deriving (Show, Eq, GHC.Generics.Generic)
 
-data TopLevel = TopLevel {
-    topLevelSecret :: Text,
-    topLevelPublic :: Text
-  } deriving (Show,Eq,GHC.Generics.Generic)
-
-
-instance FromJSON TopLevel where
-  parseJSON (Object v) = TopLevel <$> v .: "secret" <*> v .: "public"
+instance FromJSON Address where
+  parseJSON (Object v) = Address <$> v .: "secret" <*> v .: "public"
   parseJSON _          = mzero
 
-
-instance ToJSON TopLevel where
-  toJSON (TopLevel {..}) =
-    object ["secret" .= topLevelSecret, "public" .= topLevelPublic]
-  toEncoding (TopLevel {..}) =
-    pairs ("secret" .= topLevelSecret <> "public" .= topLevelPublic)
+instance ToJSON Address where
+  toJSON (Address {..}) =
+    object ["secret" .= addressSecret, "public" .= addressPublic]
+  toEncoding (Address {..}) =
+    pairs ("secret" .= addressSecret <> "public" .= addressPublic)

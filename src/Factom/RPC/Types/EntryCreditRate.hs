@@ -5,7 +5,7 @@
 {-# LANGUAGE TemplateHaskell     #-}
 {-# LANGUAGE TypeOperators       #-}
 
-module  Factom.RPC.Types.EntryCreditRate where
+module Factom.RPC.Types.EntryCreditRate where
 
 import           Control.Applicative
 import           Control.Monad                   (forM_, join, mzero)
@@ -21,19 +21,19 @@ import           System.Environment              (getArgs)
 import           System.Exit                     (exitFailure, exitSuccess)
 import           System.IO                       (hPutStrLn, stderr)
 
+--------------------------------------------------------------------------------
 -- | Workaround for https://github.com/bos/aeson/issues/287.
 o .:?? val = fmap join (o .:? val)
 
-
-data TopLevel = TopLevel {
-    topLevelRate :: Double
-  } deriving (Show,Eq,GHC.Generics.Generic)
-
+data TopLevel =
+  TopLevel
+    { topLevelRate :: Double
+    }
+  deriving (Show, Eq, GHC.Generics.Generic)
 
 instance FromJSON TopLevel where
   parseJSON (Object v) = TopLevel <$> v .: "rate"
   parseJSON _          = mzero
-
 
 instance ToJSON TopLevel where
   toJSON (TopLevel {..}) = object ["rate" .= topLevelRate]
