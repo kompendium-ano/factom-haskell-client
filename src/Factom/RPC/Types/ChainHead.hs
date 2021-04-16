@@ -21,30 +21,31 @@ import           System.Environment              (getArgs)
 import           System.Exit                     (exitFailure, exitSuccess)
 import           System.IO                       (hPutStrLn, stderr)
 
+--------------------------------------------------------------------------------
 -- | Workaround for https://github.com/bos/aeson/issues/287.
 o .:?? val = fmap join (o .:? val)
 
 
-data TopLevel = TopLevel {
-    topLevelChaininprocesslist :: Bool,
-    topLevelChainhead          :: Text
+data ChainHead = ChainHead {
+    inProcessList :: Bool,
+    head          :: Text
   } deriving (Show,Eq,GHC.Generics.Generic)
 
 
-instance FromJSON TopLevel where
+instance FromJSON ChainHead where
   parseJSON (Object v) =
-    TopLevel <$> v .: "chaininprocesslist" <*> v .: "chainhead"
+    ChainHead <$> v .: "chaininprocesslist" <*> v .: "chainhead"
   parseJSON _ = mzero
 
 
-instance ToJSON TopLevel where
-  toJSON (TopLevel {..}) = object
-    [ "chaininprocesslist" .= topLevelChaininprocesslist
-    , "chainhead" .= topLevelChainhead
+instance ToJSON ChainHead where
+  toJSON (ChainHead {..}) = object
+    [ "chaininprocesslist" .= inProcessList
+    , "chainhead" .= head
     ]
-  toEncoding (TopLevel {..}) = pairs
+  toEncoding (ChainHead {..}) = pairs
     (  "chaininprocesslist"
-    .= topLevelChaininprocesslist
+    .= inProcessList
     <> "chainhead"
-    .= topLevelChainhead
+    .= head
     )

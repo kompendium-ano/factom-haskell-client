@@ -21,21 +21,22 @@ import           System.Environment              (getArgs)
 import           System.Exit                     (exitFailure, exitSuccess)
 import           System.IO                       (hPutStrLn, stderr)
 
+--------------------------------------------------------------------------------
 -- | Workaround for https://github.com/bos/aeson/issues/287.
 o .:?? val = fmap join (o .:? val)
 
 
-data TopLevel = TopLevel {
-    topLevelChainid   :: Text,
-    topLevelEntryhash :: Text,
-    topLevelMessage   :: Text,
-    topLevelTxid      :: Text
+data CommitEntry = CommitEntry {
+    ceChainid   :: Text,
+    ceEntryhash :: Text,
+    ceMessage   :: Text,
+    ceTxid      :: Text
   } deriving (Show,Eq,GHC.Generics.Generic)
 
 
-instance FromJSON TopLevel where
+instance FromJSON CommitEntry where
   parseJSON (Object v) =
-    TopLevel
+    CommitEntry
       <$> v
       .:  "chainid"
       <*> v
@@ -47,20 +48,20 @@ instance FromJSON TopLevel where
   parseJSON _ = mzero
 
 
-instance ToJSON TopLevel where
-  toJSON (TopLevel {..}) = object
-    [ "chainid" .= topLevelChainid
-    , "entryhash" .= topLevelEntryhash
-    , "message" .= topLevelMessage
-    , "txid" .= topLevelTxid
+instance ToJSON CommitEntry where
+  toJSON (CommitEntry {..}) = object
+    [ "chainid" .= ceChainid
+    , "entryhash" .= ceEntryhash
+    , "message" .= ceMessage
+    , "txid" .= ceTxid
     ]
-  toEncoding (TopLevel {..}) = pairs
+  toEncoding (CommitEntry {..}) = pairs
     (  "chainid"
-    .= topLevelChainid
+    .= ceChainid
     <> "entryhash"
-    .= topLevelEntryhash
+    .= ceEntryhash
     <> "message"
-    .= topLevelMessage
+    .= ceMessage
     <> "txid"
-    .= topLevelTxid
+    .= ceTxid
     )
